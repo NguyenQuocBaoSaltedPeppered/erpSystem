@@ -5,27 +5,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERP.Databases.Schemas
 {
-    [Table("Users")]
-    public class User : TableHaveIdInt, ITable
+    [Table("SYSDPM")]
+    public class Department : ITable
     {
+        public Department()
+        {
+            Positions = new HashSet<Position>();
+            Users = new HashSet<User>();
+        }
         /// <summary>
-        /// Tên người dùng
+        /// Id bộ phận
+        /// </summary>
+        /// <value></value>
+        [Key]
+        [StringLength(50)]
+        public string Id { get; set; } = null!;
+        /// <summary>
+        /// Tên bộ phận
         /// </summary>
         /// <value></value>
         [StringLength(255)]
         public string Name {get; set;} = null!;
         /// <summary>
-        /// Email người dùng
+        /// Id chi nhánh
         /// </summary>
         /// <value></value>
-        [StringLength(255)]
-        public string Email {get; set;} = null!;
-        /// <summary>
-        /// Mật khẩu đăng nhập
-        /// </summary>
-        /// <value></value>
-        [StringLength(255)]
-        public string Password {get; set;} = null!;
+        public int? BranchId { get; set; }
         /// <summary>
         /// Default
         /// </summary>
@@ -37,5 +42,12 @@ namespace ERP.Databases.Schemas
         public int? UpdatedBy {get; set;}
         public string UpdatedIp {get; set;} = null!;
         public bool DelFlag {get; set;}
+        /// <summary>
+        /// Relation
+        /// </summary>
+        /// <value></value>
+        public virtual Branch? Branch { get; set; }
+        public virtual ICollection<Position> Positions { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

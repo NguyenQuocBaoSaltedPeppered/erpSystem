@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ERP.Databases
 {
-    public class DataContext : DbContext
+    public partial class DataContext : DbContext
     {
+        public IHttpContextAccessor _context = null!;
         private readonly string _connectionString = null!;
         public DataContext(
             DbContextOptions<DataContext> options, IConfiguration configuration
@@ -17,8 +18,15 @@ namespace ERP.Databases
         {
             _connectionString = configuration.GetConnectionString("Default");
         }
-        public DbSet<User> Users { get; set; } = null!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql(_connectionString);
+
+        #region System
+        public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Employee> Employees { get; set; } = null!;
+        public virtual DbSet<Branch> Branches { get; set; } = null!;
+        public virtual DbSet<Department> Departments { get; set; } = null!;
+        public virtual DbSet<Position> Positions { get; set; } = null!;
+        #endregion
     }
 }
