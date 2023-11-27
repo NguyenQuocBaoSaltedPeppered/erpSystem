@@ -9,5 +9,6 @@ namespace ERP.Bases.Models
     public interface IUserModel
     {
         Whoami? Whoami(int id);
+        Task<List<Whoami>> GetUsers(SearchCondition searchCondition);
     }
 }

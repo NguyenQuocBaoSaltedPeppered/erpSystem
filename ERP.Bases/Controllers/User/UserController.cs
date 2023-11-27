@@ -24,5 +24,10 @@ namespace ERP.Bases.Controllers
             if(me is null) return NotFound("User not Found");
             return Ok(me);
         }
+        [HttpGet]
+        public async Task<ActionResult<List<Whoami>>> GetUsers([FromQuery] SearchCondition searchCondition)
+        {
+            return Ok(await _userModel.GetUsers(searchCondition));
+        }
     }
 }

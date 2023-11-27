@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,7 +15,15 @@ builder.Services.AddEntityFrameworkNpgsql()
     (
         option => option.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
     );
-builder.Services.AddScoped<IUserModel, UserModel>();
+builder.Services.AddScoped<IUserModel, UserModel>(provider =>
+{
+    var context = provider.GetRequiredService<DataContext>();
+    var logger = provider.GetRequiredService<ILogger<UserModel>>();
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = builder.Configuration.GetConnectionString("Default");
+
+    return new UserModel(context, logger, connectionString);
+});
 var app = builder.Build();
 // DataSeeder later
 
