@@ -15,7 +15,7 @@ builder.Services.AddEntityFrameworkNpgsql()
     (
         option => option.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
     );
-
+// builder.Services.
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ERP.Bases
+namespace ERP.Databases
 {
     /// <summary>
     /// Các giá trị hằng số cơ bản cho các class base

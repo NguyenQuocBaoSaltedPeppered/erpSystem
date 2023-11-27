@@ -1,3 +1,7 @@
+using ERP.Bases.Models;
+using ERP.Databases;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,8 +10,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddEntityFrameworkNpgsql()
+    .AddDbContext<DataContext>
+    (
+        option => option.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
+    );
+builder.Services.AddScoped<IUserModel, UserModel>();
 var app = builder.Build();
+// DataSeeder later
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
