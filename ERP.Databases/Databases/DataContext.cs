@@ -23,6 +23,11 @@ namespace ERP.Databases
         // }
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // => optionsBuilder.UseNpgsql(_connectionString);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasPostgresExtension("unaccent");
+            modelBuilder.HasPostgresExtension("ltree");
+        }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
