@@ -57,9 +57,9 @@ namespace ERP.Databases
         public string UpdatedIp {get; set;}
         /// <summary>
         /// Cờ xoá dữ liệu
+        /// <para>False: Chưa xoá</para>
+        /// <para>True: Đã xoá</para>
         /// </summary>
-        /// <value>False: Chưa xoá</value>
-        /// <value>True: Đã xoá</value>
         public bool DelFlag {get; set;}
     }
 }

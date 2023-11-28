@@ -50,6 +50,24 @@ namespace ERP.Databases
         public virtual DbSet<Position> Positions { get; set; } = null!;
         #endregion
 
+        #region Asset
+        /// <summary>
+        /// Table SYSAST
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<Asset> Assets {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTTP
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetType> AssetTypes {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTU
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetUnit> AssetUnits {get; set;} = null!;
+        #endregion
+
         #region backgroundFunction
         public string GetRequestIp()
         {

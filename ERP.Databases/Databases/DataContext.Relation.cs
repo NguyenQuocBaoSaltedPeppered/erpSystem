@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ERP.Databases.Schemas;
+using ERP.Databases.Databases.Migrations;
 
 namespace EBookStore.Databases
 {
@@ -39,6 +40,19 @@ namespace EBookStore.Databases
                 .HasMany(e => e.Users)
                 .WithOne(e => e.Position)
                 .HasForeignKey(e => e.PositionId)
+                .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+
+            #region Asset
+            modelBuilder.Entity<AssetType>()
+                .HasMany(e => e.Assets)
+                .WithOne(e => e.AssetType)
+                .HasForeignKey(e => e.AssetTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetUnit>()
+                .HasMany(e => e.Assets)
+                .WithOne(e => e.AssetUnit)
+                .HasForeignKey(e => e.AssetUnitId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
