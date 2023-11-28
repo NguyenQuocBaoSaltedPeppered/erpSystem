@@ -15,13 +15,11 @@ namespace ERP.Bases.Models
     public partial class UserModel : CommonModel, IUserModel
     {
         private readonly string _className = string.Empty;
-        // private readonly DataContext _context;
         private readonly ILogger<UserModel> _logger;
         public UserModel(ILogger<UserModel> logger, IServiceProvider provider) : base(provider)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _className = GetType().Name;
-            // _context = context;
         }
         public Whoami? Whoami(int id)
         {

@@ -16,6 +16,10 @@ builder.Services.AddEntityFrameworkNpgsql()
         option => option.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
     );
 builder.Services.AddScoped<IUserModel, UserModel>();
+builder.Services.AddScoped<IBranchModel, BranchModel>();
+builder.Services.AddScoped<IDepartmentModel, DepartmentModel>();
+builder.Services.AddScoped<IPositionModel, PositionModel>();
+
 var app = builder.Build();
 // DataSeeder later
 
