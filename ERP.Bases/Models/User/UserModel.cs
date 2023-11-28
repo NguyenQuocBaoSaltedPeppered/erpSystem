@@ -12,17 +12,16 @@ using System.Data.Common;
 
 namespace ERP.Bases.Models
 {
-    public partial class UserModel : IUserModel
+    public partial class UserModel : CommonModel, IUserModel
     {
-        private readonly string _connectionString;
         private readonly string _className = string.Empty;
-        private readonly DataContext _context;
+        // private readonly DataContext _context;
         private readonly ILogger<UserModel> _logger;
-        public UserModel(DataContext context, ILogger<UserModel> logger, string connectionString)
+        public UserModel(ILogger<UserModel> logger, IServiceProvider provider) : base(provider)
         {
-            _context = context;
-            _logger = logger;
-            _connectionString = connectionString;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _className = GetType().Name;
+            // _context = context;
         }
         public Whoami? Whoami(int id)
         {
@@ -53,8 +52,9 @@ namespace ERP.Bases.Models
                 var query = GetSqlListUser(searchCondition);
                 var param = new
                 {
-                    Keyword = searchCondition.Keyword,
+                    Keyword = ConvertSearchTerm(searchCondition.Keyword),
                 };
+                _logger.LogInformation($"------ {query}");
                 var result = await _connection.QueryMultipleAsync(query, param);
                 var listUsers = (await result.ReadAsync<Whoami>()).ToList();
 
@@ -90,11 +90,12 @@ namespace ERP.Bases.Models
                         LEFT JOIN ""SYSBR"" ON ""SYSBR"".""Id"" = ""Users"".""BranchId"" AND ""SYSBR"".""DelFlag"" = FALSE
                         LEFT JOIN ""SYSDPM"" ON ""SYSDPM"".""Id"" = ""Users"".""DepartmentId"" AND ""SYSDPM"".""DelFlag"" = FALSE
                         LEFT JOIN ""SYSPOS"" ON ""SYSPOS"".""Id"" = ""Users"".""PositionId"" AND ""SYSPOS"".""DelFlag"" = FALSE
-                    WHERE 1=1
-                        AND ""Users"".""DelFlag"" = FALSE
+                    WHERE ""Users"".""DelFlag"" = FALSE
                         {(!string.IsNullOrEmpty(searchCondition.Keyword)
-                            ? $@" AND (LOWER (unaccent (""UserName"") LIKE LOWER (unaccent (@Keyword))
-                                OR LOWER (unaccent (""EmployeeCode"")) LIKE LOWER (unaccent(@Keyword)))"
+                            ? $@" AND (
+									LOWER(UNACCENT(""Users"".""Name"")) LIKE LOWER(UNACCENT(@Keyword))
+									OR LOWER(UNACCENT(""Employees"".""Code"")) LIKE LOWER(UNACCENT(@Keyword))
+								)"
                             : "")}
                         ORDER BY ""Users"".""Id"";
             
