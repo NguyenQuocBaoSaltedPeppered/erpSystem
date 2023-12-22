@@ -54,6 +54,46 @@ namespace EBookStore.Databases
                 .WithOne(e => e.AssetUnit)
                 .HasForeignKey(e => e.AssetUnitId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Asset>()
+                .HasMany(e => e.AssetStocks)
+                .WithOne(e => e.Asset)
+                .HasForeignKey(e => e.AssetId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetExport>()
+                .HasMany(e => e.AssetExportDetails)
+                .WithOne(e => e.AssetExport)
+                .HasForeignKey(e => e.AssetExportId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetStock>()
+                .HasMany(e => e.AssetExportDetails)
+                .WithOne(e => e.AssetStock)
+                .HasForeignKey(e => e.AssetStockId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetStock>()
+                .HasMany(e => e.AssetHistories)
+                .WithOne(e => e.AssetStock)
+                .HasForeignKey(e => e.AssetStockId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetImport>()
+                .HasMany(e => e.AssetImportDetails)
+                .WithOne(e => e.AssetImport)
+                .HasForeignKey(e => e.AssetImportId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Asset>()
+                .HasMany(e => e.AssetImportDetails)
+                .WithOne(e => e.Asset)
+                .HasForeignKey(e => e.AssetId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetTransfer>()
+                .HasOne(e => e.AssetExport)
+                .WithOne(e => e.AssetTransfer)
+                .HasForeignKey<AssetTransfer>(e => e.AssetExportId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<AssetTransfer>()
+                .HasOne(e => e.AssetImport)
+                .WithOne(e => e.AssetTransfer)
+                .HasForeignKey<AssetTransfer>(e => e.AssetImportId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

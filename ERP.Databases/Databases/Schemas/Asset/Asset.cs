@@ -10,6 +10,10 @@ namespace ERP.Databases.Schemas
     [Table("SYSAST")]
     public class Asset : TableHaveIdInt, IAssetQuantityColumn, ITable
     {
+        public Asset() {
+            AssetStocks = new HashSet<AssetStock>();
+            AssetImportDetails = new HashSet<AssetImportDetail>();
+        }
         /// <summary>
         /// Tên tài sản
         /// </summary>
@@ -174,6 +178,8 @@ namespace ERP.Databases.Schemas
 
         public virtual AssetType? AssetType {get; set;}
         public virtual AssetUnit? AssetUnit {get; set;}
+        public virtual ICollection<AssetStock>? AssetStocks {get; set;}
+        public virtual ICollection<AssetImportDetail>? AssetImportDetails {get; set;}
         #endregion
     }
 }

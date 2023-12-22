@@ -69,6 +69,41 @@ namespace ERP.Databases
         /// </summary>
         /// <value></value>
         public virtual DbSet<AssetUnit> AssetUnits {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTST
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetStock> AssetStocks {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTE
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetExport> AssetExports {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTEDT
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetExportDetail> AssetExportDetails {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTHTR
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetHistory> AssetHistories {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTI
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetImport> AssetImports {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTIDT
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetImportDetail> AssetImportDetails {get; set;} = null!;
+        /// <summary>
+        /// Table SYSASTTF
+        /// </summary>
+        /// <value></value>
+        public virtual DbSet<AssetTransfer> AssetTransfers {get; set;} = null!;
         #endregion
 
         #region LogControl
