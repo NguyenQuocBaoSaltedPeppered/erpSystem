@@ -1,6 +1,7 @@
 using ERP.Databases;
 using Microsoft.EntityFrameworkCore;
-
+using ERP.Bases.Models;
+using ERP.AST.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +15,15 @@ builder.Services.AddEntityFrameworkNpgsql()
     (
         option => option.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
     );
+builder.Services.AddScoped<IUserModel, UserModel>();
+builder.Services.AddScoped<IBranchModel, BranchModel>();
+builder.Services.AddScoped<IDepartmentModel, DepartmentModel>();
+builder.Services.AddScoped<IPositionModel, PositionModel>();
+builder.Services.AddScoped<ILogModel, LogModel>();
+builder.Services.AddScoped<IAssetModel, AssetModel>();
+builder.Services.AddScoped<IUnitModel, UnitModel>();
+builder.Services.AddScoped<ITypeModel, TypeModel>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
