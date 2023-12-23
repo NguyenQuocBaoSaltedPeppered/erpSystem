@@ -100,7 +100,7 @@ namespace ERP.Databases.Schemas
         public int? ResponsibleId { get; set; }
 
         public ICollection<AssetExportDetail> AssetExportDetails {get; set;}
-        public virtual AssetTransfer AssetTransfer {get; set;}
+        public virtual AssetTransfer? AssetTransfer {get; set;}
         #endregion
     }
 }

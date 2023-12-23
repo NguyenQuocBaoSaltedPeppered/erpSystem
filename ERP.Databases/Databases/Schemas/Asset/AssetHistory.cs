@@ -58,6 +58,7 @@ namespace ERP.Databases.Schemas
         /// </summary>
         /// <value></value>
         public int? AssetStockId { get; set; }
+        public int? UserId {get; set;}
         public virtual AssetStock? AssetStock {get; set;}
         #endregion
     }

@@ -12,6 +12,27 @@ namespace ERP.Bases.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        // public 
+        private readonly IAuthModel _authModel;
+        public AuthController(IAuthModel authModel)
+        {
+            _authModel = authModel;
+        }
+        [HttpPost("login")]
+        public ActionResult<Whoami> AuthLogin([FromBody] LoginInfo loginInfo)
+        {
+            try
+            {
+                Whoami? me = _authModel.AuthLogin(loginInfo);
+                if (me == null)
+                {
+                    return BadRequest("Employee Code or Password is incorrect");
+                }
+                return Ok(_authModel.AuthLogin(loginInfo));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = ex.Message});
+            }
+        }
     }
 }

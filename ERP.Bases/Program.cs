@@ -20,6 +20,7 @@ builder.Services.AddScoped<IBranchModel, BranchModel>();
 builder.Services.AddScoped<IDepartmentModel, DepartmentModel>();
 builder.Services.AddScoped<IPositionModel, PositionModel>();
 builder.Services.AddScoped<ILogModel, LogModel>();
+builder.Services.AddScoped<IAuthModel, AuthModel>();
 
 var app = builder.Build();
 // DataSeeder later

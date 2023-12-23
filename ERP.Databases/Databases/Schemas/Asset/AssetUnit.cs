@@ -34,6 +34,7 @@ namespace ERP.Databases.Schemas
         #endregion
 
         #region Relation
+        public int? UserId {get; set;}
         public virtual ICollection<Asset> Assets { get; set; }
         #endregion
     }

@@ -14,7 +14,6 @@ namespace ERP.Bases.Models.User.Schemas
         public string BranchName {get; set;} = null!;
         public string? DepartmentId {get; set;}
         public string DepartmentName {get; set;} = null!;
-
         public string? PositionId {get; set;}
         public string PositionName {get; set;} = null!;
 
