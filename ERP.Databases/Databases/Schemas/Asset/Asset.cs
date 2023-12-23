@@ -80,12 +80,12 @@ namespace ERP.Databases.Schemas
         /// Nguyên giá
         /// </summary>
         /// <value></value>
-        public decimal? OriginalPrice { get; set; }
+        public double? OriginalPrice { get; set; }
         /// <summary>
         /// Giá mua
         /// </summary>
         /// <value></value>
-        public decimal? PurchasePrice { get; set; }
+        public double? PurchasePrice { get; set; }
         /// <summary>
         /// Ngày bắt đầu tính khấu hao
         /// </summary>
@@ -110,12 +110,12 @@ namespace ERP.Databases.Schemas
         /// Số tiền đã khấu hao
         /// </summary>
         /// <value></value>
-        public decimal? DepreciatedMoney { get; set; }
+        public double? DepreciatedMoney { get; set; }
         /// <summary>
         /// Số tiền chưa khấu hao
         /// </summary>
         /// <value></value>
-        public decimal? DepreciatedMoneyRemain { get; set; }
+        public double? DepreciatedMoneyRemain { get; set; }
         /// <summary>
         /// Tỉ lệ khấu hao
         /// </summary>
