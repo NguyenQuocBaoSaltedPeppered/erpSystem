@@ -13,6 +13,34 @@ namespace ERP.Databases.Schemas
         {
             Assets = new HashSet<Asset>();
         }
+        /// <summary>
+        /// Tên loại tài sản
+        /// </summary>
+        /// <value></value>
+        public string? Name { get; set; }
+        /// <summary>
+        /// Id cha của loại tài sản
+        /// </summary>
+        /// <value></value>
+        public int? ParentId { get; set; }
+        /// <summary>
+        /// Mã của loại tài sản
+        /// </summary>
+        /// <value></value>
+        public string? Code {get; set;}
+        /// <summary>
+        /// Level của loại tài sản
+        /// </summary>
+        /// <value></value>
+        public int Level {get; set;}
+        /// <summary>
+        /// Mục của loại tài sản
+        /// 10: Tài sản cố định
+        /// 20: Công cụ dụng cụ
+        /// 70: Tất cả
+        /// </summary>
+        /// <value></value>
+        public int Category {get; set;}
         #region Default
         public DateTimeOffset CreatedAt {get; set;}
         public int CreatedBy {get; set;}
