@@ -13,18 +13,18 @@
 ast#codeAssetUnitAPI
 ```
 
-# Commit naming rule
-## Prefix list:
+## Commit naming rule
+### Prefix list:
 - `Feat`: new feature
 - `Fix`: fix bug
-## Naming rules:
+### Naming rules:
 - `prefix`: [ERP-`Affected Module List`] `Commit name`
 
 ```
 Feat: [ERP-AST-Databases] Define new relation and code asset unit API
 ```
 
-# Pull Request
+## Pull Request
 - Please coding on the branch created from issue.
 - Make pull request if you want to merge into dev.
 - Close the issue once it was resolved.
