@@ -3,6 +3,7 @@ using System;
 using ERP.Databases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ERP.Databases.Databases.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231224054442_addColumnForAssetExport")]
+    partial class addColumnForAssetExport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -822,9 +825,6 @@ namespace ERP.Databases.Databases.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BranchId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Code")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
@@ -841,9 +841,6 @@ namespace ERP.Databases.Databases.Migrations
                     b.Property<bool>("DelFlag")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("DepartmentId")
-                        .HasColumnType("character varying(50)");
-
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -854,10 +851,6 @@ namespace ERP.Databases.Databases.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
                 });
@@ -1099,21 +1092,6 @@ namespace ERP.Databases.Databases.Migrations
                     b.Navigation("Branch");
                 });
 
-            modelBuilder.Entity("ERP.Databases.Schemas.Employee", b =>
-                {
-                    b.HasOne("ERP.Databases.Schemas.Branch", "Branch")
-                        .WithMany("Employees")
-                        .HasForeignKey("BranchId");
-
-                    b.HasOne("ERP.Databases.Schemas.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Department");
-                });
-
             modelBuilder.Entity("ERP.Databases.Schemas.Position", b =>
                 {
                     b.HasOne("ERP.Databases.Schemas.Department", "Department")
@@ -1192,15 +1170,11 @@ namespace ERP.Databases.Databases.Migrations
                 {
                     b.Navigation("Departments");
 
-                    b.Navigation("Employees");
-
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ERP.Databases.Schemas.Department", b =>
                 {
-                    b.Navigation("Employees");
-
                     b.Navigation("Positions");
 
                     b.Navigation("Users");

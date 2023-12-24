@@ -16,7 +16,6 @@ namespace ERP.Bases.Models.User.Schemas
         public string DepartmentName {get; set;} = null!;
         public string? PositionId {get; set;}
         public string PositionName {get; set;} = null!;
-
         public string? Email {get; set;}
     }
 }

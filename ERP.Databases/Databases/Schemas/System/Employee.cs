@@ -18,10 +18,7 @@ namespace ERP.Databases.Schemas
         /// <value></value>
         [StringLength(255)]
         public string Code {get; set;} = null!;
-        /// <summary>
-        /// Default
-        /// </summary>
-        /// <value></value>
+        #region Default
         public DateTimeOffset CreatedAt {get; set;}
         public int CreatedBy {get; set;}
         public string CreatedIp {get; set;} = null!;
@@ -29,10 +26,14 @@ namespace ERP.Databases.Schemas
         public int? UpdatedBy {get; set;}
         public string UpdatedIp {get; set;} = null!;
         public bool DelFlag {get; set;}
-        /// <summary>
-        /// Relation
-        /// </summary>
-        /// <value></value>
+        #endregion
+
+        #region Relation
         public virtual User User { get; set; } = null!;
+        public int? BranchId { get; set; }
+        public string DepartmentId { get; set; }
+        public virtual Branch Branch { set; get; }
+        public virtual Department Department { set; get; }
+        #endregion
     }
 }

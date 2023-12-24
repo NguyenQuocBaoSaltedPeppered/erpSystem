@@ -14,6 +14,16 @@ namespace EBookStore.Databases
                 .WithOne(e => e.User)
                 .HasForeignKey<User>(e => e.EmployeeId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Department>()
+                .HasMany(e => e.Employees)
+                .WithOne(e => e.Department)
+                .HasForeignKey(e => e.DepartmentId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Branch>()
+                .HasMany(e => e.Employees)
+                .WithOne(e => e.Branch)
+                .HasForeignKey(e => e.BranchId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Branch>()
                 .HasMany(e => e.Departments)
