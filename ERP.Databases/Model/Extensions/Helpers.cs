@@ -9,7 +9,6 @@ namespace ERP.Databases
 {
     public partial class Helpers
     {
-        
         /// <summary>
         /// Chuyển từ tiếng việt có dấu thành tiếng việt không dấu.
         /// </summary>
@@ -40,7 +39,6 @@ namespace ERP.Databases
             }
             return temp;
         }
-
         [GeneratedRegex("\\p{IsCombiningDiacriticalMarks}+")]
         private static partial Regex MyRegex();
     }

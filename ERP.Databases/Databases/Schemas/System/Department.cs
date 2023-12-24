@@ -12,6 +12,7 @@ namespace ERP.Databases.Schemas
         {
             Positions = new HashSet<Position>();
             Users = new HashSet<User>();
+            Employees = new HashSet<Employee>();
         }
         /// <summary>
         /// Id bộ phận
@@ -49,5 +50,6 @@ namespace ERP.Databases.Schemas
         public virtual Branch? Branch { get; set; }
         public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Employee> Employees {get; set;}
     }
 }

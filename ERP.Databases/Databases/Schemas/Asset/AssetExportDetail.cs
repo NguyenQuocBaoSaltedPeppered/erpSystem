@@ -43,6 +43,15 @@ namespace ERP.Databases.Schemas
         /// <value></value>
         public int? AssetExportId { get; set; }
         public virtual AssetExport? AssetExport {get; set;}
+        /// <summary>
+        /// Mã cấp phát ( xử lý cho trường hợp báo hỏng/ bảo hành/... từ tài sản đã cấp phát )
+        /// </summary>
+        public int? AssetAllocationId { get; set; }
+        /// <summary>
+        /// Mã xuất kho ( mã phiếu hỏng cho trường hợp bảo hành )
+        /// </summary>
+        /// <value></value>
+        public int? AssetBrokenExportId { get; set; }
         public virtual AssetStock? AssetStock {get; set;}
         #endregion
     }

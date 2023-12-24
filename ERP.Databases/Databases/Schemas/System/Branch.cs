@@ -12,6 +12,7 @@ namespace ERP.Databases.Schemas
         {
             Departments = new HashSet<Department>();
             Users = new HashSet<User>();
+            Employees = new HashSet<Employee>();
         }
         /// <summary>
         /// Tên chi nhánh
@@ -36,5 +37,6 @@ namespace ERP.Databases.Schemas
         /// <value></value>
         public virtual ICollection<Department> Departments { get; set; }
         public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }
