@@ -10,6 +10,6 @@ namespace ERP.AST.Models
     public interface IAssetModel
     {
         Task<ResponseInfo> CreateAsset(AssetData assetData);
-
+        Task<ListAssetData> GetListAssetData(AssetFilter assetFilter);
     }
 }

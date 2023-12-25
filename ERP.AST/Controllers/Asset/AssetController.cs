@@ -30,5 +30,18 @@ namespace ERP.AST.Controllers
         {
             return Ok(await _assetModel.CreateAsset(assetData));
         }
+        /// <summary>
+        /// Danh sách tài sản
+        /// <para>Created at: 23/12/2023</para>
+        /// <para>Created by: HoangTH</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet()]
+        public async Task<IActionResult> GetListAssetData([FromQuery] AssetFilter filter)
+        {
+            return Ok(await _assetModel.GetListAssetData(filter));
+        }
     }
 }
