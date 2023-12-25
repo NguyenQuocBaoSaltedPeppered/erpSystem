@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ERP.Databases.Schemas;
-using ERP.Databases.Databases.Migrations;
 
 namespace EBookStore.Databases
 {
