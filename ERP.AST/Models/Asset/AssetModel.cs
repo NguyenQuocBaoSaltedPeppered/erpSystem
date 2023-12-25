@@ -398,7 +398,7 @@ namespace ERP.AST.Models
                 AND offset_ <= {CurrentPage * PageSize}
             ";
         }
-         protected string MakingSortingQueryString(int? OrderBy, int? SortedBy)
+        protected string MakingSortingQueryString(int? OrderBy, int? SortedBy)
         {
             if (SortedBy != null && OrderBy == null)
             {
@@ -418,6 +418,126 @@ namespace ERP.AST.Models
                     return $@"ORDER BY ""GuaranteeExpirationDate"" {orderBy}";
                 default:
                     return $@"ORDER BY ""AssetId"" DESC";
+            }
+        }
+        public async Task<List<AssetUserDetail>> GetAssetUsers (AssetUserDetailFilter filter)
+        {
+            string method = GetActualAsyncMethodName();
+            DbConnection _connection = _context.GetConnection();
+            try
+            {
+                _logger.LogInformation($"[][{_className}][{method}] Start");
+                List<AssetUserDetail> userList = new();
+                string selectQuery = @"
+                    SELECT ""Users"".""Id"" AS ""AssetUserId""
+                        , ""Users"".""Name"" AS ""UserName""
+                    FROM ""SYSAST""
+                    INNER JOIN ""SYSASTST""
+                    ON (
+                        ""SYSAST"".""Id"" = ""SYSASTST"".""AssetId""
+                        AND ""SYSASTST"".""DelFlag"" = FALSE
+                    )
+                    ---UserData
+                    INNER JOIN ""Users""
+                    ON (
+                        ""SYSASTST"".""UserId"" = ""Users"".""Id""
+                        AND ""Users"".""DelFlag"" = FALSE
+                    )
+                    WHERE ""SYSAST"".""DelFlag"" = FALSE
+                    AND ""SYSAST"".""Id"" = @AssetId
+                    ORDER BY ""SYSASTST"".""Id"" DESC
+                ";
+                var param = new
+                {
+                    filter.AssetId,
+                };
+                _logger.LogInformation($"[][{_className}][{method}] Query start:");
+                _logger.LogInformation($"{selectQuery}");
+                userList = (List<AssetUserDetail>) await _connection.QueryAsync<AssetUserDetail>(selectQuery, param);
+                _logger.LogInformation($"[][{_className}][{method}] End");
+                return userList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[][{_className}][{method}] Exception: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<AssetUserDetail> GetAssetUserDetail (AssetUserDetailFilter filter)
+        {
+            string method = GetActualAsyncMethodName();
+            DbConnection _connection = _context.GetConnection();
+            try
+            {
+                _logger.LogInformation($"[][{_className}][{method}] Start");
+                AssetUserDetail userInfo = new();
+                string selectQuery = @"
+                    SELECT ""SYSASTST"".""Id"" AS ""StockId""
+                        , ""SYSASTST"".""Quantity"" AS ""StockQuantity""
+                        ---UserData
+                        , ""Users"".""Id"" AS ""AssetUserId""
+                        , ""Employees"".""Code"" AS ""UserCode""
+                        , ""Users"".""Name"" AS ""UserName""
+                        ---BranchData
+                        , ""SYSBR"".""Id"" AS ""UserBranchId""
+                        , ""SYSBR"".""Name"" AS ""UserBranchName""
+                        ---DepartmentData
+                        , ""SYSDPM"".""Id"" AS ""UserDepartmentId""
+                        , ""SYSDPM"".""Name"" AS ""UserDepartmentName""
+                    FROM ""SYSAST""
+                    INNER JOIN ""SYSASTST""
+                    ON (
+                        ""SYSAST"".""Id"" = ""SYSASTST"".""AssetId""
+                        AND ""SYSASTST"".""DelFlag"" = FALSE
+                    )
+                    ---UserData
+                    INNER JOIN ""Users""
+                    ON (
+                        ""SYSASTST"".""UserId"" = ""Users"".""Id""
+                        AND ""Users"".""DelFlag"" = FALSE
+                    )
+                    INNER JOIN ""Employees""
+                    ON (
+                        ""Users"".""EmployeeId"" = ""Employees"".""Id""
+                        AND ""Employees"".""DelFlag"" = FALSE
+                    )
+                    ---BranchData
+                    LEFT JOIN ""SYSBR""
+                    ON (
+                        ""SYSBR"".""Id"" = ""SYSASTST"".""BranchId""
+                        AND ""SYSBR"".""DelFlag"" = FALSE
+                    )
+                    ---DepartmentData
+                    LEFT JOIN ""SYSDPM""
+                    ON (
+                        ""SYSDPM"".""Id"" = ""SYSASTST"".""DepartmentId""
+                        AND ""SYSDPM"".""DelFlag"" = FALSE
+                    )
+                    WHERE ""SYSAST"".""DelFlag"" = FALSE
+                    AND (
+                        @AssetId IS NULL
+                        OR ""SYSAST"".""Id"" = @AssetId
+                    )
+                    AND (
+                        @UserId IS NULL
+                        OR ""Users"".""Id"" = @UserId
+                    )
+                ";
+                var param = new
+                {
+                    filter.AssetId,
+                    filter.UserId,
+                };
+                _logger.LogInformation($"[][{_className}][{method}] Query start:");
+                _logger.LogInformation($"{selectQuery}");
+                userInfo = await _connection.QueryFirstOrDefaultAsync<AssetUserDetail>(selectQuery, param);
+                _logger.LogInformation($"[][{_className}][{method}] End");
+                return userInfo;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[][{_className}][{method}] Exception: {ex.Message}");
+                throw;
             }
         }
     }
