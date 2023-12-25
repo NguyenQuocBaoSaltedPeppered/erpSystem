@@ -374,14 +374,41 @@ namespace ERP.AST.Models
                         assetFilter.UserId,
                         assetFilter.DepartmentId
                     };
-                    var result = await _connection.QueryMultipleAsync(sqlMain, param);
-                    int totalRecord = await result.ReadFirstOrDefaultAsync<int>();
-                    listAssetData.Data = (await result.ReadAsync<AssetData>()).ToList();
-
-                    if(totalRecord > 0)
-                    {
-                        listAssetData.Paging = new Paging(totalRecord, assetFilter.CurrentPage, assetFilter.PageSize);
-                    }
+                    var dictionary = new Dictionary<int, AssetData>();
+                var grid = await _connection.QueryMultipleAsync(sqlMain, param);
+                int totalRecord = await grid.ReadFirstOrDefaultAsync<int>();
+                if(totalRecord > 0)
+                {
+                    listAssetData.Paging = new Paging(totalRecord, assetFilter.CurrentPage, assetFilter.PageSize);
+                }
+                listAssetData.Data = (grid.Read<AssetData, AssetUserDetail, AssetData>(
+                    (asset, userDetail) => {
+                        AssetData entry;
+                        if(!dictionary.TryGetValue(asset.AssetId, out entry))
+                        {
+                            entry = asset;
+                            asset.AssetUserDetails = new List<AssetUserDetail>();
+                            dictionary.Add(entry.AssetId, entry);
+                        }
+                        if(userDetail != null)
+                        {
+                            entry.AssetUserDetails.Add(new AssetUserDetail()
+                            {
+                                StockQuantity = userDetail.StockQuantity,
+                                UserBranchId = userDetail.UserBranchId,
+                                UserBranchName = userDetail.UserBranchName,
+                                UserDepartmentId = userDetail.UserDepartmentId,
+                                UserDepartmentName = userDetail.UserDepartmentName,
+                                AssetUserId = userDetail.AssetUserId,
+                                UserName = userDetail.UserName,
+                                UserCode = userDetail.UserCode,
+                            });
+                        }
+                        return entry;
+                    }, splitOn: "AssetStockId"
+                )).Distinct().AsList();
+                
+                _logger.LogInformation($"[{_className}][{method}] End");
                 return listAssetData;
             }
             catch (Exception ex)

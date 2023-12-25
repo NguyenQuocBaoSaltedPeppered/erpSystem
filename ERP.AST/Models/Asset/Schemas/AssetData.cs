@@ -9,7 +9,7 @@ namespace ERP.AST.Models.Asset.Schemas
 		public AssetData()
 		{
         }
-        public int? AssetId { get; set; }
+        public int AssetId { get; set; }
         /// <summary>
         /// Mã kho
         /// </summary>
@@ -269,5 +269,6 @@ namespace ERP.AST.Models.Asset.Schemas
         public int? QuantityCancel {get; set;}
         public int? QuantityGuarantee {get; set;}
         public int? QuantityLost {get; set;}
+        public List<AssetUserDetail> AssetUserDetails {get; set;}
     }
 }
