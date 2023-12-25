@@ -21,6 +21,7 @@ builder.Services.AddScoped<IDepartmentModel, DepartmentModel>();
 builder.Services.AddScoped<IPositionModel, PositionModel>();
 builder.Services.AddScoped<ILogModel, LogModel>();
 builder.Services.AddScoped<IAssetModel, AssetModel>();
+builder.Services.AddScoped<IAssetImportAndExportModel, AssetImportAndExportModel>();
 builder.Services.AddScoped<IUnitModel, UnitModel>();
 builder.Services.AddScoped<ITypeModel, TypeModel>();
 

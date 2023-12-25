@@ -75,7 +75,6 @@ namespace ERP.AST.Models
         /// <returns></returns>
         public async Task<ResponseInfo> AssetExportIncrease(AssetExportData assetExportData, string AssetActionCode, int AssetActionType)
         {
-            IDbContextTransaction transaction = null;
             string method = GetActualAsyncMethodName();
             DbConnection connection = _context.GetConnection();
             try
@@ -87,7 +86,7 @@ namespace ERP.AST.Models
                     .Include(x => x.User)
                     .Where(x => !x.DelFlag && !x.User.DelFlag && x.User.Id == assetExportData.UserId)
                     .FirstOrDefaultAsync();
-                TblAssetExport tblAssetExport = new TblAssetExport()
+                TblAssetExport tblAssetExport = new()
                 {
                     ExportDate = assetExportData.ExportDate,
                     // Code = AssetActionCode,
@@ -110,7 +109,7 @@ namespace ERP.AST.Models
                     int quantity = 0;
                     int quantityRemain = 0;
                     double totalMoney = 0;
-                    TblAssetStock assetStock = new TblAssetStock();
+                    TblAssetStock assetStock = new();
                     assetStock = await _context.AssetStocks
                         .Include(x => x.Asset)
                         .Where(x => !x.DelFlag
@@ -197,7 +196,7 @@ namespace ERP.AST.Models
                         ActionName = actionName,
                         BeginInventory = quantityOld,
                         QuantityChange = assetExportDetail.Quantity.Value,
-                        EndQuantity = (quantityOld - quantity),
+                        EndQuantity = quantityOld - quantity,
                         ValueInventory = (quantityOld - quantity) * assetStock.Asset.OriginalPrice,
                         AssetStockId = assetStock.Id,
                         Note = assetExportDetail.Note,
