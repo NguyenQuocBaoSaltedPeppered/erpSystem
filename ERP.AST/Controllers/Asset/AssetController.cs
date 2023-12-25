@@ -74,7 +74,7 @@ namespace ERP.AST.Controllers
         /// <response code="404">Không tìm thấy thông tin</response>
         /// <response code="500">Lỗi khi có exception</response>
         [HttpGet("list/user-detail")]
-        [ProducesResponseType(typeof(AssetUserDetail), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<AssetUserDetail>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAssetUserDetail([FromQuery] AssetUserDetailFilter filter)
         {
             try

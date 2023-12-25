@@ -10,11 +10,11 @@ namespace ERP.AST.Models.Asset.Schemas
         /// Id Tài sản
         /// </summary>
         /// <value></value>
-        public int AssetId {get; set;}
+        public int? AssetId {get; set;}
         /// <summary>
         /// Id người sử dụng
         /// </summary>
         /// <value></value>
-        public int UserId {get; set;}
+        public int? UserId {get; set;}
     }
 }

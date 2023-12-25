@@ -462,14 +462,14 @@ namespace ERP.AST.Models
                 throw;
             }
         }
-        public async Task<AssetUserDetail> GetAssetUserDetail (AssetUserDetailFilter filter)
+        public async Task<List<AssetUserDetail>> GetAssetUserDetail (AssetUserDetailFilter filter)
         {
             string method = GetActualAsyncMethodName();
             DbConnection _connection = _context.GetConnection();
             try
             {
                 _logger.LogInformation($"[][{_className}][{method}] Start");
-                AssetUserDetail userInfo = new();
+                List<AssetUserDetail> userInfo = new();
                 string selectQuery = @"
                     SELECT ""SYSASTST"".""Id"" AS ""StockId""
                         , ""SYSASTST"".""Quantity"" AS ""StockQuantity""
@@ -529,7 +529,7 @@ namespace ERP.AST.Models
                 };
                 _logger.LogInformation($"[][{_className}][{method}] Query start:");
                 _logger.LogInformation($"{selectQuery}");
-                userInfo = await _connection.QueryFirstOrDefaultAsync<AssetUserDetail>(selectQuery, param);
+                userInfo = (List<AssetUserDetail>) await _connection.QueryAsync<AssetUserDetail>(selectQuery, param);
                 _logger.LogInformation($"[][{_className}][{method}] End");
                 return userInfo;
             }
