@@ -10,7 +10,7 @@ namespace ERP.AST.Models
     public interface IUnitModel
     {
         Task<ResponseInfo> CreateUnit(UnitCreateSchema createData);
-        Task<List<UnitCreateSchema>> GetUnits(SearchCondition searchCondition);
+        Task<List<Units>> GetUnits(SearchCondition searchCondition);
 
 
     }

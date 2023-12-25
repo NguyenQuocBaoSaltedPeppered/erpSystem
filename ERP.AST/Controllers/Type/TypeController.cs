@@ -32,7 +32,7 @@ namespace ERP.AST.Controllers
         }
 
          [HttpGet("search")]
-         public async Task<ActionResult<List<TypeData>>> GetTypes([FromQuery] SearchCondition searchCondition)
+         public async Task<ActionResult<List<Types>>> GetTypes([FromQuery] SearchCondition searchCondition)
         {
             return Ok(await _typeModel.GetTypes(searchCondition));
         }

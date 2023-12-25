@@ -59,7 +59,7 @@ namespace ERP.AST.Models
             
         }
 
-        public async Task<List<UnitCreateSchema>> GetUnits(SearchCondition searchCondition)
+        public async Task<List<Units>> GetUnits(SearchCondition searchCondition)
         {
             DbConnection _connection = _context.GetConnection();
             try
@@ -83,7 +83,7 @@ namespace ERP.AST.Models
                     Keyword = ConvertSearchTerm(searchCondition.Keyword),
                 };
                 var result = await _connection.QueryMultipleAsync(query, param);
-                var listUnits = (await result.ReadAsync<UnitCreateSchema>()).ToList();
+                var listUnits = (await result.ReadAsync<Units>()).ToList();
                 return listUnits;
             }
             catch (Exception ex)

@@ -98,7 +98,7 @@ namespace ERP.AST.Models
             }
             
         }
-        public async Task<List<TypeData>> GetTypes(SearchCondition searchCondition)
+        public async Task<List<Types>> GetTypes(SearchCondition searchCondition)
         {
             DbConnection _connection = _context.GetConnection();
             try
@@ -122,7 +122,7 @@ namespace ERP.AST.Models
                     Keyword = ConvertSearchTerm(searchCondition.Keyword),
                 };
                 var result = await _connection.QueryMultipleAsync(query, param);
-                var listTypes = (await result.ReadAsync<TypeData>()).ToList();
+                var listTypes = (await result.ReadAsync<Types>()).ToList();
                 return listTypes;
             }
             catch (Exception ex)
