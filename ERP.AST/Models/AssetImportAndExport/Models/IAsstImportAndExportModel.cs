@@ -10,6 +10,7 @@ namespace ERP.AST.Models
 {
     public interface IAssetImportAndExportModel
     {
+        Task<ResponseInfo> CreateAssetImport(AssetImportData assetImportData);
         Task<ResponseInfo> CreateAssetExport(AssetExportData assetExportData);
     }
     public partial class AssetImportAndExportModel : CommonModel, IAssetImportAndExportModel
