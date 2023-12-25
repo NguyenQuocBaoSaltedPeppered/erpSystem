@@ -22,6 +22,15 @@ namespace ERP.Bases
             services.AddControllers();
             services.AddHttpClient();
             services.AddSingleton<StartupState>();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:9000")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                });
+            });
         }
     }
 }
