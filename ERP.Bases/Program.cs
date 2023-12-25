@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
         options.AddPolicy(name: "ERP System",
         builder =>
         {
-            builder.WithOrigins("http://localhost:5269")
+            builder.WithOrigins("http://localhost:9001")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowAnyMethod();
