@@ -30,7 +30,7 @@ namespace ERP.AST.Controllers
         {
             return Ok(await _unitModel.CreateUnit(createData));
         }
-        [HttpGet("search")]
+        [HttpGet()]
          public async Task<ActionResult<List<UnitCreateSchema>>> GetUnits([FromQuery] SearchCondition searchCondition)
         {
             return Ok(await _unitModel.GetUnits(searchCondition));

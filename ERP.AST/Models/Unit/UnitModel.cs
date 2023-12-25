@@ -68,6 +68,7 @@ namespace ERP.AST.Models
                     SELECT 
                             ""Id"" AS ""UnitId""
                         ,   ""Name"" AS ""UnitName""
+                        ,   ""Code"" AS ""UnitCode""
                     FROM ""SYSASTU""
                     WHERE ""DelFlag"" = FALSE
                     {(!string.IsNullOrEmpty(searchCondition.Keyword)

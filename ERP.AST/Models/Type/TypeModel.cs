@@ -107,6 +107,10 @@ namespace ERP.AST.Models
                     SELECT 
                             ""Id"" AS ""TypeId""
                         ,   ""Name"" AS ""TypeName""
+                        ,   ""Code"" AS ""TypeCode""
+                        ,   ""Level""
+                        ,   ""ParentId""
+                        ,   ""Category""
                     FROM ""SYSASTTP""
                     WHERE ""DelFlag"" = FALSE
                     {(!string.IsNullOrEmpty(searchCondition.Keyword)
