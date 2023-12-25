@@ -104,5 +104,18 @@ namespace ERP.AST.Controllers
                 return StatusCode(500, new { Error = e.Message });
             }
         }
+        /// <summary>
+        /// Danh sách phiếu bàn giao
+        /// <para>Created at: 02/08/2023</para>
+        /// <para>Created by: PhucVinh</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet("hand-over/list")]
+        public async Task<IActionResult> GetListAssetHandOverData([FromQuery] FilterTransfer filter)
+        {
+            return Ok(await _assetImportAndExportModel.GetListAssetHandOverData(filter));
+        }
     }
 }
