@@ -19,6 +19,27 @@ namespace ERP.AST.Controllers
             _assetImportAndExportModel = assetImportAndExportModel;
         }
         /// <summary>
+        /// Tạo phiếu báo tăng
+        /// <para>Created at: 25/12/2023</para>
+        /// <para>Created by: BaoNQ</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpPost("import")]
+        [ProducesResponseType(typeof(AssetImportData), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CreateAssetImport([FromBody] AssetImportData assetImportData)
+        {
+            try
+            {
+                return Ok(await _assetImportAndExportModel.CreateAssetImport(assetImportData));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = e.Message });
+            }
+        }
+        /// <summary>
         /// Tạo phiếu báo giảm
         /// <para>Created at: 25/12/2023</para>
         /// <para>Created by: BaoNQ</para>
