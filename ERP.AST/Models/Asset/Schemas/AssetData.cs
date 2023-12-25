@@ -50,13 +50,30 @@ namespace ERP.AST.Models.Asset.Schemas
         [Required]
         public int TypeId { get; set; }
         /// <summary>
+        /// Tên loại tài sản
+        /// </summary>
+        /// <value></value>
+        public string TypeName { get; set; }
+        /// <summary>
+        /// Mã loại tài sản
+        /// </summary>
+        /// <value></value>
+        public string TypeCode { get; set; }
+        /// <summary>
         /// Đơn vị tính
         /// </summary>
         [Required]
         public int? UnitId { get; set; }
-        public string TypeName { get; set; }
-        public string TypeCode { get; set; }
+        /// <summary>
+        /// Tên đơn vị tính
+        /// </summary>
+        /// <value></value>
         public string UnitName { get; set; }
+        /// <summary>
+        /// Mã đơn vị tính
+        /// </summary>
+        /// <value></value>
+        public string UnitCode { get; set; }
         /// <summary>
         /// Số lượng tài sản
         /// </summary>
