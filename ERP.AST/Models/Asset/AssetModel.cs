@@ -126,8 +126,8 @@ namespace ERP.AST.Models
                     QuantityLost = 0,
                     // End Quantity setup
                     UserId = assetData.UserId,
-                    BranchId = users.BranchId,
-                    DepartmentId = users.DepartmentId,
+                    BranchId = users.Employee.BranchId,
+                    DepartmentId = users.Employee.DepartmentId,
                     Vendor = assetData.VendorName,
                     DateBuy = assetData.DateBuy,
                     PurchasePrice = assetData.PurchasePrice,
@@ -151,7 +151,7 @@ namespace ERP.AST.Models
                     Note = assetData.Note,
                     AssetStocks = new List<TblAssetStock>
                     {
-                        new() 
+                        new()
                         {
                             Quantity = assetData.Quantity,
                             QuantityAllocated = 0,
@@ -160,10 +160,10 @@ namespace ERP.AST.Models
                             QuantityBroken = 0,
                             QuantityGuarantee = 0,
                             QuantityLost = 0,
-                            Type = (users.BranchId == 0) ? 1 : 2, // 1: kho tổng, 2: chi nhánh
+                            Type = (users.Employee.BranchId == 0) ? 1 : 2, // 1: kho tổng, 2: chi nhánh
                             UserId = assetData.UserId,
-                            BranchId = users.BranchId,
-                            DepartmentId = users.DepartmentId,
+                            BranchId = users.Employee.BranchId,
+                            DepartmentId = users.Employee.DepartmentId,
                         }
                     }
                 };
@@ -369,11 +369,10 @@ namespace ERP.AST.Models
                     var param = new
                     {
                         Keyword = ConvertSearchTerm(assetFilter.Keyword),
-                        TypeAsset = assetFilter.TypeAsset,
-                        BranchId = assetFilter.BranchId,
-                        VendorId = assetFilter.VendorId,
-                        UserId = assetFilter.UserId,
-                        DepartmentId = assetFilter.DepartmentId
+                        assetFilter.TypeAsset,
+                        assetFilter.BranchId,
+                        assetFilter.UserId,
+                        assetFilter.DepartmentId
                     };
                     var result = await _connection.QueryMultipleAsync(sqlMain, param);
                     int totalRecord = await result.ReadFirstOrDefaultAsync<int>();
@@ -382,7 +381,7 @@ namespace ERP.AST.Models
                     if(totalRecord > 0)
                     {
                         listAssetData.Paging = new Paging(totalRecord, assetFilter.CurrentPage, assetFilter.PageSize);
-                    }                
+                    }
                 return listAssetData;
             }
             catch (Exception ex)
@@ -533,6 +532,111 @@ namespace ERP.AST.Models
                 userInfo = await _connection.QueryFirstOrDefaultAsync<AssetUserDetail>(selectQuery, param);
                 _logger.LogInformation($"[][{_className}][{method}] End");
                 return userInfo;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[][{_className}][{method}] Exception: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<ListAssetData> GetListAssetStockData(AssetFilter assetFilter)
+        {
+            string method = GetActualAsyncMethodName();
+            DbConnection _connection = _context.GetConnection();
+            try
+            {
+                _logger.LogInformation($"[][{_className}][{method}] Start");
+                ListAssetData listAssetData = new();
+                assetFilter ??= new AssetFilter();
+                string selectQuery = $@"
+                    SELECT
+                        ""SYSAST"".""Id"" AS ""AssetId""
+                        , ""SYSASTST"".""Id"" AS ""SYSASTSTId""
+                        , ""SYSAST"".""Code""
+                        , ""SYSAST"".""Name""
+                        , ""SYSASTST"".""Quantity""
+                        , ""SYSASTST"".""QuantityRemain""
+                        , ""SYSBR"".""Id"" AS ""BranchId""
+                        , ""SYSBR"".""Name"" AS ""BranchName""
+                        , ""SYSDPM"".""Id"" AS ""DepartmentId""
+                        , ""SYSDPM"".""Name"" AS ""DepartmentName""
+                        , ""Users"".""Id"" AS ""UserId""
+                        , ""Employees"".""Code"" AS ""EmployeeCode""
+                        , ""Users"".""Name"" AS ""UserName""
+                    FROM
+                        ""SYSAST""
+                    INNER JOIN ""SYSASTST""
+                        ON (
+                            ""SYSASTST"".""AssetId"" = ""SYSAST"".""Id""
+                            AND ""SYSASTST"".""DelFlag"" = FALSE
+                        )
+                    LEFT JOIN ""SYSASTTP""
+                        ON (
+                            ""SYSAST"".""AssetTypeId"" = ""SYSASTTP"".""Id""
+                            AND ""SYSASTTP"".""DelFlag"" = FALSE
+                        )
+                    INNER JOIN ""SYSASTU""
+                        ON (
+                            ""SYSAST"".""AssetUnitId"" = ""SYSASTU"".""Id""
+                            AND ""SYSASTU"".""DelFlag"" = FALSE
+                        )
+                    INNER JOIN ""Users""
+                        ON (
+                            ""Users"".""Id"" = ""SYSASTST"".""UserId""
+                            AND ""Users"".""DelFlag"" = FALSE
+                        )
+                    INNER JOIN ""Employees""
+                        ON (
+                            ""Users"".""EmployeeId"" = ""Employees"".""Id""
+                            AND ""Employees"".""DelFlag"" = FALSE
+                        )
+                    INNER JOIN ""SYSDPM""
+                        ON (
+                            ""Employees"".""DepartmentId"" = ""SYSDPM"".""Id""
+                            AND ""SYSDPM"".""DelFlag"" = FALSE
+                        )
+                    INNER JOIN ""SYSBR""
+                        ON (
+                            ""SYSDPM"".""BranchId"" = ""SYSBR"".""Id""
+                            AND ""SYSBR"".""DelFlag"" = FALSE
+                        )
+                    WHERE
+                        ""SYSAST"".""DelFlag"" = FALSE
+                        AND (
+                            @BranchId IS NULL
+                            OR ""SYSASTST"".""BranchId"" = @BranchId
+                        )
+                        AND (
+                            @UserId IS NULL
+                            OR ""SYSASTST"".""UserId"" = @UserId
+                        )
+                        AND (
+                            @Keyword IS NULL
+                            OR @Keyword = ''
+                            OR LOWER (""SYSAST"".""Code"") LIKE @Keyword
+                            OR LOWER (""SYSAST"".""AssetId"") LIKE @Keyword
+                        )
+                        AND ""SYSASTST"".""QuantityRemain"" > 0
+                    ORDER BY ""SYSAST"".""Id"" DESC
+                ";
+                string sqlCount = $@"
+                    SELECT
+                        COUNT(*)
+                    FROM ({selectQuery}) AS c
+                ";
+                var param = new
+                {
+                    Keyword = string.IsNullOrEmpty(assetFilter.Keyword) ?  assetFilter.Keyword : assetFilter.Keyword.ToLower(),
+                    assetFilter.TypeAsset,
+                    assetFilter.BranchId,
+                    assetFilter.UserId
+                };
+                _logger.LogInformation($"[][{_className}][{method}] QueryStart: {selectQuery}");
+                int count = await _connection.QueryFirstOrDefaultAsync<int>(sqlCount, param);
+                listAssetData.Paging = new Paging(count, assetFilter.CurrentPage, assetFilter.PageSize);
+                listAssetData.Data = (List<AssetData>)await _connection.QueryAsync<AssetData>(selectQuery + GetPagingQueryString(listAssetData.Paging), param);
+                _logger.LogInformation($"[][{_className}][{method}] End");
+                return listAssetData;
             }
             catch (Exception ex)
             {

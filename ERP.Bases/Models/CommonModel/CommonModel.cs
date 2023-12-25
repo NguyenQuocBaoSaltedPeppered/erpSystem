@@ -139,5 +139,17 @@ namespace ERP.Bases.Models
             }
             return conn.QueryFirstAsync<bool>(sql, new { id = lockId });
         }
+        /// <summary>
+        /// Get paging query string
+        /// </summary>
+        /// <param name="paging"></param>
+        /// <returns></returns>
+        protected string GetPagingQueryString(Paging paging)
+        {
+            return $@"
+                OFFSET {(paging.CurrentPage - 1) * paging.PageSize} ROWS
+                FETCH NEXT {paging.PageSize} ROWS ONLY
+            ";
+        }
     }
 }

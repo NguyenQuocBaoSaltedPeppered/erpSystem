@@ -17,11 +17,6 @@ namespace ERP.AST.Models.Asset.Schemas
         /// </summary>
         public int? UnitId { get; set; }
         /// <summary>
-        /// Nhà cung cấp
-        /// </summary>
-        /// <value></value>
-        public string VendorId { get; set; }
-        /// <summary>
         /// Chi nhánh
         /// </summary>
         public int? BranchId { get; set; }
@@ -55,16 +50,6 @@ namespace ERP.AST.Models.Asset.Schemas
         /// </summary>
         /// <value></value>
         public int? Category { get; set; }
-        /// <summary>
-        /// Tình trạng
-        /// 10: Mới
-        /// 20: Cũ còn tốt
-        /// 30: Lỗi
-        /// 40: Hỏng
-        /// 50: Bảo hành
-        /// </summary>
-        /// <value></value>
-        public string StatusQuality { get; set; }
         /// <summary>
         /// Cách sắp xếp
         /// 0: desc - Giảm dần
