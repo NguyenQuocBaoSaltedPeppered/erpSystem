@@ -11,7 +11,8 @@ namespace ERP.AST.Models
     {
         Task<ResponseInfo> CreateType(TypeData createData);
         Task<List<Types>> GetTypes(SearchCondition searchCondition);
-
-
+        Task<ResponseInfo> DeleteType(int id);
+        Task<ResponseInfo> UpdateType(TypeData createData);
+        Task<List<TypeData>> GetSelectBox();
     }
 }

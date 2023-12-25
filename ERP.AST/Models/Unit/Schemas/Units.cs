@@ -7,8 +7,8 @@ namespace ERP.AST.Models.Unit.Schemas
 {
     public class Units
     {
-        public int     UnitId   {get;set;}
-        public string UnitCode {get; set;}
-        public string UnitName {get; set;}
+        public int Id   {get;set;}
+        public string Code {get; set;}
+        public string Name {get; set;}
     }
 }

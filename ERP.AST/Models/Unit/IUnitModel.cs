@@ -11,7 +11,7 @@ namespace ERP.AST.Models
     {
         Task<ResponseInfo> CreateUnit(UnitCreateSchema createData);
         Task<List<Units>> GetUnits(SearchCondition searchCondition);
-
-
+        Task<ResponseInfo> UpdateUnit(UnitCreateSchema createData);
+        Task<ResponseInfo> DeleteUnit(int Id);
     }
 }
