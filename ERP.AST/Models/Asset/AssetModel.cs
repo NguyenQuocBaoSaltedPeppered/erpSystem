@@ -614,7 +614,6 @@ namespace ERP.AST.Models
                             @Keyword IS NULL
                             OR @Keyword = ''
                             OR LOWER (""SYSAST"".""Code"") LIKE @Keyword
-                            OR LOWER (""SYSAST"".""AssetId"") LIKE @Keyword
                         )
                         AND ""SYSASTST"".""QuantityRemain"" > 0
                     ORDER BY ""SYSAST"".""Id"" DESC
