@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 namespace ERP.AST.Models.AssetImportAndExport.Schemas
 {
     public class AssetExportData
@@ -30,7 +29,6 @@ namespace ERP.AST.Models.AssetImportAndExport.Schemas
         /// 40: Xuất cấp phát nếu từ kho tổng
         /// 50: Báo hủy
         /// 60: Báo mất
-        /// 80: Báo thanh lý
         /// </summary>
         /// <value></value>
         public int? Type { get; set; }
