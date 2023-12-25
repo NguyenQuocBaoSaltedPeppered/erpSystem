@@ -25,10 +25,16 @@ namespace ERP.AST.Controllers
         /// <returns>Thông tin</returns>
         /// <response code="404">Không tìm thấy thông tin</response>
         /// <response code="500">Lỗi khi có exception</response>
-        [HttpPost()]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateType([FromBody] TypeData createData)
         {
             return Ok(await _typeModel.CreateType(createData));
+        }
+
+         [HttpGet()]
+         public async Task<ActionResult<List<Types>>> GetTypes([FromQuery] SearchCondition searchCondition)
+        {
+            return Ok(await _typeModel.GetTypes(searchCondition));
         }
     }
 }

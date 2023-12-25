@@ -10,6 +10,8 @@ namespace ERP.AST.Models
     public interface ITypeModel
     {
         Task<ResponseInfo> CreateType(TypeData createData);
+        Task<List<Types>> GetTypes(SearchCondition searchCondition);
+
 
     }
 }

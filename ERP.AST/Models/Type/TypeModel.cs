@@ -98,5 +98,43 @@ namespace ERP.AST.Models
             }
             
         }
+        public async Task<List<Types>> GetTypes(SearchCondition searchCondition)
+        {
+            DbConnection _connection = _context.GetConnection();
+            try
+            {
+                var query = $@"
+                    SELECT 
+                            ""Id"" AS ""TypeId""
+                        ,   ""Name"" AS ""TypeName""
+                        ,   ""Code"" AS ""TypeCode""
+                        ,   ""Level""
+                        ,   ""ParentId""
+                        ,   ""Category""
+                    FROM ""SYSASTTP""
+                    WHERE ""DelFlag"" = FALSE
+                    {(!string.IsNullOrEmpty(searchCondition.Keyword)
+                            ? $@" AND (
+									LOWER(UNACCENT(""Name"")) LIKE LOWER(UNACCENT(@Keyword))
+								)"
+                            : "")}
+                    ORDER BY ""Id"" DESC;
+                ";
+                _logger.LogInformation($"------ {query}");
+                var param = new
+                {
+                    Keyword = ConvertSearchTerm(searchCondition.Keyword),
+                };
+                var result = await _connection.QueryMultipleAsync(query, param);
+                var listTypes = (await result.ReadAsync<Types>()).ToList();
+                return listTypes;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                throw;
+            }
+            
+        }
     }
 }
