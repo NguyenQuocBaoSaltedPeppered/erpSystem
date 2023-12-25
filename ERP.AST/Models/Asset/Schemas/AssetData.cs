@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 namespace ERP.AST.Models.Asset.Schemas
 {
-    public class AssetData 
+    public class AssetData
 	{
 		public AssetData()
 		{
         }
-        public string AssetIDCode { get; set; }
+        public int? AssetId { get; set; }
         /// <summary>
         /// Mã kho
         /// </summary>
@@ -56,7 +56,6 @@ namespace ERP.AST.Models.Asset.Schemas
         public int? UnitId { get; set; }
         public string TypeName { get; set; }
         public string TypeCode { get; set; }
-        public string GroupName { get; set; }
         public string UnitName { get; set; }
         /// <summary>
         /// Số lượng tài sản

@@ -13,5 +13,6 @@ namespace ERP.AST.Models
         Task<ListAssetData> GetListAssetData(AssetFilter assetFilter);
         Task<List<AssetUserDetail>> GetAssetUsers (AssetUserDetailFilter filter);
         Task<AssetUserDetail> GetAssetUserDetail (AssetUserDetailFilter filter);
+        Task<ListAssetData> GetListAssetStockData(AssetFilter assetFilter);
     }
 }
