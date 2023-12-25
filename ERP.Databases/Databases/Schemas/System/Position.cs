@@ -10,7 +10,7 @@ namespace ERP.Databases.Schemas
     {
         public Position()
         {
-            Users = new HashSet<User>();
+            Employees = new HashSet<Employee>();
         }
         /// <summary>
         /// Id bộ phận
@@ -46,6 +46,6 @@ namespace ERP.Databases.Schemas
         /// </summary>
         /// <value></value>
         public virtual Department? Department { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }
