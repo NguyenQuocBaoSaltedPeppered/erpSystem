@@ -58,5 +58,40 @@ namespace ERP.AST.Models
             }
             
         }
+
+        public async Task<List<UnitCreateSchema>> GetUnits(SearchCondition searchCondition)
+        {
+            DbConnection _connection = _context.GetConnection();
+            try
+            {
+                var query = $@"
+                    SELECT 
+                            ""Id"" AS ""UnitId""
+                        ,   ""Name"" AS ""UnitName""
+                    FROM ""SYSASTU""
+                    WHERE ""DelFlag"" = FALSE
+                    {(!string.IsNullOrEmpty(searchCondition.Keyword)
+                            ? $@" AND (
+									LOWER(UNACCENT(""Name"")) LIKE LOWER(UNACCENT(@Keyword))
+								)"
+                            : "")}
+                    ORDER BY ""Id"" DESC;
+                ";
+                _logger.LogInformation($"------ {query}");
+                var param = new
+                {
+                    Keyword = ConvertSearchTerm(searchCondition.Keyword),
+                };
+                var result = await _connection.QueryMultipleAsync(query, param);
+                var listUnits = (await result.ReadAsync<UnitCreateSchema>()).ToList();
+                return listUnits;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                throw;
+            }
+            
+        }
     }
 }
