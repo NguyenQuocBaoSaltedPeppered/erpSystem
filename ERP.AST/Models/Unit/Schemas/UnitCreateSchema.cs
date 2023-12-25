@@ -3,6 +3,7 @@ namespace ERP.AST.Models.Unit.Schemas
 {
     public class UnitCreateSchema
     {
+        public int? Id { get; set; }
         /// <summary>
         /// Tên đơn vị tính
         /// </summary>

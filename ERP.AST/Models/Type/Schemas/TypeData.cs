@@ -3,6 +3,11 @@ namespace ERP.AST.Models.Type.Schemas
     public class TypeData 
     {
         /// <summary>
+        /// Id loại tài sản
+        /// </summary>
+        /// <value></value>
+        public int? Id {get; set;}
+        /// <summary>
         /// Tên tài sản
         /// </summary>
         /// <value></value>

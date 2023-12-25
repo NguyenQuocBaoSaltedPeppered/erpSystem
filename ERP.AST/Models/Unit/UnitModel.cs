@@ -66,9 +66,9 @@ namespace ERP.AST.Models
             {
                 var query = $@"
                     SELECT 
-                            ""Id"" AS ""UnitId""
-                        ,   ""Name"" AS ""UnitName""
-                        ,   ""Code"" AS ""UnitCode""
+                            ""Id""
+                        ,   ""Name""
+                        ,   ""Code""
                     FROM ""SYSASTU""
                     WHERE ""DelFlag"" = FALSE
                     {(!string.IsNullOrEmpty(searchCondition.Keyword)
@@ -92,7 +92,79 @@ namespace ERP.AST.Models
                 _logger.LogError($"Error: {ex.Message}");
                 throw;
             }
-            
+        }
+        public async Task<ResponseInfo> UpdateUnit(UnitCreateSchema updateData)
+        {
+            string method = GetActualAsyncMethodName();
+            try
+            {
+                _logger.LogInformation($"[{_className}][{method}] Start");
+                ResponseInfo response = new();
+                var checkCode = await _context.AssetUnits
+                    .Where(x => x.Code == updateData.Code && !x.DelFlag && x.Id != updateData.Id)
+                    .FirstOrDefaultAsync();
+                if (checkCode != null)
+                {
+                    response.Code = CodeResponse.HAVE_ERROR;
+                    response.MsgNo = MSG_NO.CALCULATION_UNIT_CODE_IS_EXISTED;
+                    return response;
+                }
+                var assetUnitOld = await _context.AssetUnits
+                    .Where(x => !x.DelFlag && x.Id == updateData.Id)
+                    .FirstOrDefaultAsync();
+                if (assetUnitOld == null)
+                {
+                    response.Code = CodeResponse.HAVE_ERROR;
+                    response.MsgNo = MSG_NO.CALCULATION_UNIT_NOT_FOUND;
+                    return response;
+                }
+                assetUnitOld.Name = updateData.Name;
+                assetUnitOld.Code = updateData.Code;
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"[{_className}][{method}] End");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[{_className}][{method}] Exception: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<ResponseInfo> DeleteUnit(int Id)
+        {
+            string method = GetActualAsyncMethodName();
+            try
+            {
+                _logger.LogInformation($"[{_className}][{method}] Start");
+                ResponseInfo response = new();
+                var assetUnitDelete = await _context.AssetUnits
+                    .Where(x => !x.DelFlag && x.Id == Id)
+                    .FirstOrDefaultAsync();
+                if (assetUnitDelete == null)
+                {
+                    response.Code = CodeResponse.HAVE_ERROR;
+                    response.MsgNo = MSG_NO.CALCULATION_UNIT_NOT_FOUND;
+                    return response;
+                }
+                var isUnitHaveAsset = await _context.Assets
+                    .Where(x => !x.DelFlag && x.AssetUnitId == Id)
+                    .FirstOrDefaultAsync();
+                if(isUnitHaveAsset != null)
+                {
+                    response.Code = CodeResponse.HAVE_ERROR;
+                    response.MsgNo = MSG_NO.CALCULATION_UNIT_ALREADY_IN_USE;
+                    return response;
+                }
+                assetUnitDelete.DelFlag = true;
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"[{_className}][{method}] End");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[{_className}][{method}] Exception: {ex.Message}");
+                throw;
+            }
         }
     }
 }

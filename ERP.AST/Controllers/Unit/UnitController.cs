@@ -30,10 +30,36 @@ namespace ERP.AST.Controllers
         {
             return Ok(await _unitModel.CreateUnit(createData));
         }
-        [HttpGet()]
-         public async Task<ActionResult<List<UnitCreateSchema>>> GetUnits([FromQuery] SearchCondition searchCondition)
+        [HttpGet("list")]
+        public async Task<ActionResult<List<Units>>> GetUnits([FromQuery] SearchCondition searchCondition)
         {
             return Ok(await _unitModel.GetUnits(searchCondition));
+        }
+        /// <summary>
+        /// Cập nhật đơn vị tính
+        /// <para>Created at: 25/12/2023</para>
+        /// <para>Created by: HoangTH</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUnit([FromBody] UnitCreateSchema updateData)
+        {
+            return Ok(await _unitModel.UpdateUnit(updateData));
+        }
+        /// <summary>
+        /// Cập nhật đơn vị tính
+        /// <para>Created at: 25/12/2023</para>
+        /// <para>Created by: HoangTH</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUnit([FromRoute] int id)
+        {
+            return Ok(await _unitModel.DeleteUnit(id));
         }
     }
 }

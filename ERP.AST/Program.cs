@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ERP.Bases.Models;
 using ERP.AST.Models;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 // Add services to the container.
 
@@ -35,7 +36,6 @@ builder.Services.AddScoped<IAssetModel, AssetModel>();
 builder.Services.AddScoped<IAssetImportAndExportModel, AssetImportAndExportModel>();
 builder.Services.AddScoped<IUnitModel, UnitModel>();
 builder.Services.AddScoped<ITypeModel, TypeModel>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
