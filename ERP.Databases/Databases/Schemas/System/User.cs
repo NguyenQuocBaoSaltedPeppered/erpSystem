@@ -32,21 +32,6 @@ namespace ERP.Databases.Schemas
         /// <value></value>
         public int? EmployeeId { get; set; }
         /// <summary>
-        /// Id chi nhánh
-        /// </summary>
-        /// <value></value>
-        public int? BranchId { get; set; }
-        /// <summary>
-        /// Id bộ phận
-        /// </summary>
-        /// <value></value>
-        public string? DepartmentId { get; set; }
-        /// <summary>
-        /// Id vị trí
-        /// </summary>
-        /// <value></value>
-        public string? PositionId { get; set; }
-        /// <summary>
         /// Default
         /// </summary>
         /// <value></value>
@@ -62,8 +47,5 @@ namespace ERP.Databases.Schemas
         /// </summary>
         /// <value></value>
         public virtual Employee Employee { get; set; } = null!;
-        public virtual Branch Branch { get; set; } = null!;
-        public virtual Department Department { get; set; } = null!;
-        public virtual Position Position { get; set; } = null!;
     }
 }

@@ -23,30 +23,35 @@ namespace ERP.Bases.Models
         }
         public Whoami? Whoami(int id)
         {
-            return _context.Users
-                .Include(x => x.Employee)
+            string method = GetActualAsyncMethodName();
+            _logger.LogInformation($"[][{_className}][{method}]");
+            return _context.Employees
+                .Include(x => x.User)
                 .Include(x => x.Branch)
                 .Include(x => x.Department)
                 .Include(x => x.Position)
-                .Where(u => u.Id == id).Select(u => new Whoami{
-                EmployeeId = u.Employee.Id,
-                EmployeeCode = u.Employee.Code,
-                UserId = u.Id,
-                UserName = u.Name,
-                BranchId = u.BranchId,
-                BranchName = u.Branch.Name,
-                DepartmentId = u.DepartmentId,
-                DepartmentName = u.Department.Name,
-                PositionId = u.PositionId,
-                PositionName = u.Position.Name,
-                Email = u.Email
-            }).FirstOrDefault();
+                .Where(u => u.User.Id == id)
+                .Select(u => new Whoami{
+                    EmployeeId = u.Id,
+                    EmployeeCode = u.Code,
+                    UserId = u.User.Id,
+                    UserName = u.User.Name,
+                    BranchId = u.BranchId,
+                    BranchName = u.Branch.Name,
+                    DepartmentId = u.DepartmentId,
+                    DepartmentName = u.Department.Name,
+                    PositionId = u.PositionId,
+                    PositionName = u.Position.Name,
+                    Email = u.User.Email
+                }).FirstOrDefault();
         }
         public async Task<List<Whoami>> GetUsers(SearchCondition searchCondition)
         {
             DbConnection _connection = _context.GetConnection();
+            string method = GetActualAsyncMethodName();
             try
             {
+                _logger.LogInformation($"[][{_className}][{method}] Start");
                 var query = GetSqlListUser(searchCondition);
                 var param = new
                 {
@@ -55,7 +60,7 @@ namespace ERP.Bases.Models
                 _logger.LogInformation($"------ {query}");
                 var result = await _connection.QueryMultipleAsync(query, param);
                 var listUsers = (await result.ReadAsync<Whoami>()).ToList();
-
+                _logger.LogInformation($"[][{_className}][{method}] End");
                 return listUsers;
             }
             catch (Exception ex)
@@ -63,7 +68,6 @@ namespace ERP.Bases.Models
                 _logger.LogError($"Error: {ex.Message}");
                 throw;
             }
-            
         }
 
         private static string GetSqlListUser(SearchCondition searchCondition)
@@ -71,9 +75,9 @@ namespace ERP.Bases.Models
             var sql = $@"
                     DROP TABLE IF EXISTS ""TEMPUsers"";
                     CREATE TEMPORARY TABLE ""TEMPUsers"" AS
-                    SELECT 
+                    SELECT
                             ""Employees"".""Id"" AS ""EmployeeId""
-                        ,	""Employees"".""Code"" AS ""EmployeeCode""	
+                        ,	""Employees"".""Code"" AS ""EmployeeCode""
                         ,	""Users"".""Id"" AS ""UserId""
                         ,	""Users"".""Name"" AS ""UserName""
                         ,	""Users"".""BranchId"" AS ""BranchId""
@@ -85,9 +89,9 @@ namespace ERP.Bases.Models
                         ,	""Users"".""Email""
                     FROM ""Users""
                         LEFT JOIN ""Employees"" ON ""Employees"".""Id"" = ""Users"".""EmployeeId"" AND ""Employees"".""DelFlag"" = FALSE
-                        LEFT JOIN ""SYSBR"" ON ""SYSBR"".""Id"" = ""Users"".""BranchId"" AND ""SYSBR"".""DelFlag"" = FALSE
-                        LEFT JOIN ""SYSDPM"" ON ""SYSDPM"".""Id"" = ""Users"".""DepartmentId"" AND ""SYSDPM"".""DelFlag"" = FALSE
-                        LEFT JOIN ""SYSPOS"" ON ""SYSPOS"".""Id"" = ""Users"".""PositionId"" AND ""SYSPOS"".""DelFlag"" = FALSE
+                        LEFT JOIN ""SYSBR"" ON ""SYSBR"".""Id"" = ""Employees"".""BranchId"" AND ""SYSBR"".""DelFlag"" = FALSE
+                        LEFT JOIN ""SYSDPM"" ON ""SYSDPM"".""Id"" = ""Employees"".""DepartmentId"" AND ""SYSDPM"".""DelFlag"" = FALSE
+                        LEFT JOIN ""SYSPOS"" ON ""SYSPOS"".""Id"" = ""Employees"".""PositionId"" AND ""SYSPOS"".""DelFlag"" = FALSE
                     WHERE ""Users"".""DelFlag"" = FALSE
                         {(!string.IsNullOrEmpty(searchCondition.Keyword)
                             ? $@" AND (
@@ -96,7 +100,6 @@ namespace ERP.Bases.Models
 								)"
                             : "")}
                         ORDER BY ""Users"".""Id"";
-            
                     SELECT * FROM ""TEMPUsers"";
                 ";
             return sql;

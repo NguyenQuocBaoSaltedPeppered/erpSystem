@@ -24,6 +24,11 @@ namespace EBookStore.Databases
                 .WithOne(e => e.Branch)
                 .HasForeignKey(e => e.BranchId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Position>()
+                .HasMany(e => e.Employees)
+                .WithOne(e => e.Position)
+                .HasForeignKey(e => e.PositionId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Branch>()
                 .HasMany(e => e.Departments)
@@ -34,22 +39,6 @@ namespace EBookStore.Databases
                 .HasMany(e => e.Positions)
                 .WithOne(e => e.Department)
                 .HasForeignKey(e => e.DepartmentId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Branch>()
-                .HasMany(e => e.Users)
-                .WithOne(e => e.Branch)
-                .HasForeignKey(e => e.BranchId)
-                .OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Department>()
-                .HasMany(e => e.Users)
-                .WithOne(e => e.Department)
-                .HasForeignKey(e => e.DepartmentId)
-                .OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Position>()
-                .HasMany(e => e.Users)
-                .WithOne(e => e.Position)
-                .HasForeignKey(e => e.PositionId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 

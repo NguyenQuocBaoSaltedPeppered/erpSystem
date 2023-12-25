@@ -10,7 +10,6 @@ namespace ERP.Databases.Schemas
     {
         public Employee()
         {
-
         }
         /// <summary>
         /// Mã nhân viên
@@ -32,8 +31,10 @@ namespace ERP.Databases.Schemas
         public virtual User User { get; set; } = null!;
         public int? BranchId { get; set; }
         public string DepartmentId { get; set; }
+        public string PositionId { get; set; }
         public virtual Branch Branch { set; get; }
         public virtual Department Department { set; get; }
+        public virtual Position Position {get; set;}
         #endregion
     }
 }

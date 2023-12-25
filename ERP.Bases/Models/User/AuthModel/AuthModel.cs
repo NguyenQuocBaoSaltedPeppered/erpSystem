@@ -18,30 +18,31 @@ namespace ERP.Bases.Models
         }
         public Whoami AuthLogin(LoginInfo loginInfo)
         {
+            string method = GetActualAsyncMethodName();
             try
             {
-                Whoami? me = _context.Users
-                    .Include(x => x.Employee)
-                    .Include(x => x.Branch)
-                    .Include(x => x.Department)
-                    .Include(x => x.Position)
-                    .Where(u => !u.DelFlag &&
-                        u.Employee.Code == loginInfo.EmployeeCode &&
-                        u.Password == loginInfo.Password
-                    )
-                    .Select(u => new Whoami{
-                    EmployeeId = u.Employee.Id,
-                    EmployeeCode = u.Employee.Code,
-                    UserId = u.Id,
-                    UserName = u.Name,
+                _logger.LogInformation($"[][{_className}][{method}] Start");
+                Whoami? me = _context.Employees
+                .Include(x => x.User)
+                .Include(x => x.Branch)
+                .Include(x => x.Department)
+                .Include(x => x.Position)
+                .Where(u => u.Code == loginInfo.EmployeeCode
+                    && u.User.Password == loginInfo.Password
+                )
+                .Select(u => new Whoami{
+                    EmployeeId = u.Id,
+                    EmployeeCode = u.Code,
+                    UserId = u.User.Id,
+                    UserName = u.User.Name,
                     BranchId = u.BranchId,
                     BranchName = u.Branch.Name,
                     DepartmentId = u.DepartmentId,
                     DepartmentName = u.Department.Name,
-                    PositionId = u.PositionId,
                     PositionName = u.Position.Name,
-                    Email = u.Email
+                    Email = u.User.Email
                 }).FirstOrDefault();
+                _logger.LogInformation($"[][{_className}][{method}] End");
                 return me;
             }
             catch (Exception ex)
