@@ -15,6 +15,6 @@ namespace ERP.AST.Models.Asset.Schemas
         /// Id người sử dụng
         /// </summary>
         /// <value></value>
-        public int? UserId {get; set;}
+        public int UserId {get; set;}
     }
 }

@@ -151,30 +151,6 @@ namespace ERP.AST.Models.Asset.Schemas
         /// <value></value>
         public DateTime? GuaranteeExpirationDate { get; set; }
         /// <summary>
-        /// Trạng thái ghi tăng
-        /// 10: Mua mới
-        /// 20: Mua cũ
-        /// </summary>
-        /// <value></value>
-        [StringLength(5)]
-        public string StatusBuy { get; set; }
-        /// <summary>
-        /// Trạng thái chất lượng hiện tại
-        /// 10 : Mới
-        /// 20 : Cũ còn tốt
-        /// 30 : Lỗi
-        /// 40 : Hỏng
-        /// 50 : Bảo hành
-        /// </summary>
-        /// <value></value>
-        [StringLength(5)]
-        public string StatusQuality { get; set; }
-        /// <summary>
-        /// Tên trạng thái chất lượng hiện tại
-        /// </summary>
-        /// <value></value>
-        public string StatusQualityName {get; set;}
-        /// <summary>
         /// Id nhà cung cấp
         /// </summary>
         /// <value></value>
@@ -266,22 +242,6 @@ namespace ERP.AST.Models.Asset.Schemas
         /// <value>TRUE: Có thể được cập nhật</value>
         /// <value>FALSE: Không thể thể được cập nhật</value>
         public bool? IsUpdatable {get; set;}
-        /// <summary>
-        /// File
-        /// </summary>
-        public List<IFormFile> File { get; set; }
-        /// <summary>
-        /// FileLink
-        /// </summary>
-        public List<string> FileLink {get; set;}
-        /// <summary>
-        /// Image
-        /// </summary>
-        public IFormFile AssetImage { get; set; }
-        /// <summary>
-        /// ImageLink
-        /// </summary>
-        public string AssetImageLink { get; set; }
         public int? QuantityBroken {get; set;}
         public int? QuantityCancel {get; set;}
         public int? QuantityGuarantee {get; set;}

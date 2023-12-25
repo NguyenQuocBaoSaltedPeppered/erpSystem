@@ -74,7 +74,7 @@ namespace ERP.AST.Controllers
         /// <response code="404">Không tìm thấy thông tin</response>
         /// <response code="500">Lỗi khi có exception</response>
         [HttpGet("list/user-detail")]
-        [ProducesResponseType(typeof(List<AssetUserDetail>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AssetUserDetail), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAssetUserDetail([FromQuery] AssetUserDetailFilter filter)
         {
             try
@@ -88,8 +88,8 @@ namespace ERP.AST.Controllers
         }
         /// <summary>
         /// Danh sách tài sản
-        /// <para>Created at: 08/08/2023</para>
-        /// <para>Created by: PhucVinh</para>
+        /// <para>Created at: 25/12/2023</para>
+        /// <para>Created by: BaoNQ</para>
         /// </summary>
         /// <returns>Thông tin</returns>
         /// <response code="404">Không tìm thấy thông tin</response>
@@ -101,6 +101,27 @@ namespace ERP.AST.Controllers
             try
             {
                 return Ok(await _assetModel.GetListAssetStockData(filter));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = e.Message });
+            }
+        }
+        /// <summary>
+        /// Lấy chi tiết tài sản
+        /// <para>Created at: 25/12/2023</para>
+        /// <para>Created by: BaoNQ</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(AssetData), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetDetailAsset([FromRoute] int id)
+        {
+            try
+            {
+                return Ok(await _assetModel.GetDetailAsset(id));
             }
             catch (Exception e)
             {
