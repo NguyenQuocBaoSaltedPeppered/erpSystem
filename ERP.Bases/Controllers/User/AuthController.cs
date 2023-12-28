@@ -36,19 +36,19 @@ namespace ERP.Bases.Controllers
         }
 
          [HttpPost("register")]
-        public ActionResult AuthRegister([FromBody] RegisterInfo registerInfo)
+        public ActionResult<Whoami> AuthRegister([FromBody] RegisterInfo registerInfo)
         {
             try
             {
 
-                bool registeredUser = _authModel.AuthRegister(registerInfo);
+                Whoami? registeredUser = _authModel.AuthRegister(registerInfo);
 
-                if (registeredUser)
+                if (registeredUser ==null)
                 {
-                    return Ok("Registration success");
+                    return BadRequest("Registration failed. Employee Code already exists or other errors occurred.");
                 }
 
-                return BadRequest("Registration failed. Employee Code already exists or other errors occurred.");
+                return Ok(registeredUser);
             }
             catch (Exception ex)
             {

@@ -50,7 +50,7 @@ namespace ERP.Bases.Models
                 throw;
             }
         }
-          public  bool AuthRegister(RegisterInfo registerInfo)
+          public  Whoami AuthRegister(RegisterInfo registerInfo)
     {
         try
         {
@@ -59,22 +59,11 @@ namespace ERP.Bases.Models
 
             if (isEmployeeCodeExists)
             {
-                return false;
+                return null;
             }
-            DateTimeOffset currentDateTimeOffset = DateTimeOffset.Now;
             var newEmployee = new Databases.Schemas.Employee
             {
             Code = registerInfo.EmployeeCode,
-            CreatedAt = currentDateTimeOffset,
-            UpdatedAt = currentDateTimeOffset,
-            CreatedBy = 1, 
-            CreatedIp = "::1",
-            UpdatedBy = 1, 
-            UpdatedIp = "::1",
-            DelFlag = false,
-            BranchId = null, 
-            DepartmentId = null, 
-            PositionId = null, 
             };
 
             _context.Employees.Add(newEmployee);
@@ -84,18 +73,18 @@ namespace ERP.Bases.Models
             Name = registerInfo.EmployeeName,
             Email = registerInfo.Email,
             Password = registerInfo.Password,
-            CreatedAt = currentDateTimeOffset,
-            CreatedBy = 1, 
-            CreatedIp = "::1",
-            UpdatedAt = currentDateTimeOffset,
-            UpdatedBy = 1, 
-            UpdatedIp = "::1",
-            DelFlag = false,
             EmployeeId= newEmployee.Id,
             };
             _context.Users.Add(newUser);
             _context.SaveChanges();
-            return true;
+            return new Whoami
+            {
+                EmployeeId = newEmployee.Id,
+                EmployeeCode = newEmployee.Code,
+                UserId = newUser.Id,
+                UserName = newUser.Name,
+                Email= newUser.Email,
+            };
         }
         catch (Exception ex)
         {
@@ -107,7 +96,7 @@ namespace ERP.Bases.Models
             _logger.LogError($"Inner Exception: {innerException.Message}");
             innerException = innerException.InnerException;
         }
-        return false;
+        return null;
         }
     }
     }
