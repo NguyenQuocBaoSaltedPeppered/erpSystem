@@ -166,10 +166,25 @@ namespace ERP.AST.Models
                             UserId = assetData.UserId,
                             BranchId = users.Employee.BranchId,
                             DepartmentId = users.Employee.DepartmentId,
+                            AssetHistories = new List<TblAssetHistory>
+                            {
+                                new()
+                                {
+                                    ActionName = "Tăng mới",
+                                    BeginInventory = 0,
+                                    QuantityChange = assetData.Quantity,
+                                    EndQuantity = assetData.Quantity,
+                                    ValueInventory= assetData.Quantity * assetData.OriginalPrice
+                                }
+                            }
                         }
                     }
                 };
                 _context.Assets.Add(assetDataSubmit);
+                await _context.SaveChangesAsync();
+                int assetId = assetDataSubmit.Id;
+                string actionCode = await GenIdCodeAsync("TM", assetId, "SYSAST");
+                assetDataSubmit.AssetStocks.First().AssetHistories.First().AcctionCode = actionCode;
                 await _context.SaveChangesAsync();
                 return responseInfo;
             }
@@ -755,6 +770,72 @@ namespace ERP.AST.Models
             {
                 _logger.LogError($"[][{_className}][{method}] Exception: {ex.Message}");
                 throw;
+            }
+        }
+
+        public async Task<ListAssetHistory> GetAssetHistory(int IdAsset, PagingFilter pagingFilter)
+        {
+            string method = GetActualAsyncMethodName();
+            DbConnection _connection = _context.GetConnection();
+
+            try
+            {
+                _logger.LogInformation($"[{_className}][{method}] Start");
+                ListAssetHistory returnedData = new ListAssetHistory();
+                string selectQuery = @"
+                    SELECT
+                        ""SYSASTHTR"".""Id"",
+                        ""SYSASTHTR"".""CreatedAt"",
+                        ""SYSASTHTR"".""AcctionCode"" AS ""Code"",
+                        ""SYSASTHTR"".""ActionName"" AS ""Name"",
+                        ""SYSASTTF"".""Id"" AS ""TransferId"",
+                        ""SYSASTHTR"".""BeginInventory"",
+                        ""SYSASTHTR"".""QuantityChange"",
+                        ""SYSASTHTR"".""EndQuantity"",
+                        ""SYSASTHTR"".""ValueInventory"",
+                        COALESCE(""SYSASTHTR"".""Note"", '') AS ""Note""
+                    FROM
+                        ""SYSASTHTR""
+                    INNER JOIN ""SYSASTST""
+                    ON (
+                        ""SYSASTHTR"".""AssetStockId"" = ""SYSASTST"".""Id""
+                        AND ""SYSASTST"".""DelFlag"" = FALSE
+                    )
+                    INNER JOIN ""SYSAST""
+                    ON (
+                        ""SYSASTST"".""AssetId"" = ""SYSAST"".""Id""
+                        AND ""SYSAST"".""DelFlag"" = FALSE
+                    )
+                    LEFT JOIN ""SYSASTTF""
+                    ON (
+                        ""SYSASTTF"".""Code"" = ""SYSASTHTR"".""AcctionCode""
+                        AND ""SYSASTTF"".""DelFlag"" = FALSE
+                    )
+                    WHERE ""SYSASTHTR"".""DelFlag"" = FALSE
+                    AND ""SYSAST"".""Id"" = @Id
+                    ORDER BY ""SYSASTHTR"".""Id"" DESC
+                ";
+                string sqlCount = $@"
+                    SELECT
+                        COUNT(*)
+                    FROM ({selectQuery}) AS c
+                ";
+                var param = new
+                {
+                    Id = IdAsset,
+                };
+                Console.WriteLine(sqlCount);
+                int count = await _connection.QueryFirstOrDefaultAsync<int>(sqlCount, param);
+                returnedData.Paging = new Paging(count, pagingFilter.CurrentPage, pagingFilter.PageSize);
+                returnedData.Data = (List<AssetHistoryData>)await _connection.QueryAsync<AssetHistoryData>(selectQuery + GetPagingQueryString(returnedData.Paging), param);
+                _logger.LogInformation($"[{_className}][{method}] End");
+                return returnedData;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[{_className}][{method}] Exception: {ex.Message}");
+                throw ;
             }
         }
     }
