@@ -15,26 +15,17 @@ namespace ERP.Databases
     public partial class DataContext : DbContext
     {
         public IHttpContextAccessor _context = null!;
-        // private readonly string _connectionString = null!;
         public DataContext(
             DbContextOptions<DataContext> options
-            // , IConfiguration configuration
         ) : base(options)
         {
-            // _connectionString = configuration.GetConnectionString("Default");
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // => optionsBuilder.UseNpgsql(_connectionString);
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("unaccent");
             modelBuilder.HasPostgresExtension("ltree");
         }
-        // public DataContext(DbContextOptions<DataContext> options) : base(options)
-        // {
-
-        // }
         public DbConnection GetConnection()
         {
             DbConnection _connection = Database.GetDbConnection();
@@ -130,19 +121,20 @@ namespace ERP.Databases
         {
             try
             {
-                _context ??= StartupState.Instance.Services.GetService<IHttpContextAccessor>();
-                string accountId = "0";
-                ClaimsPrincipal user = null;
-                if (_context != null && _context.HttpContext != null)
-                {
-                    user = _context.HttpContext.User;
-                }
-                if (user != null && user.Identity != null && user.Identity.IsAuthenticated)
-                {
-                    var identity = user.Identity as ClaimsIdentity;
-                    accountId = identity.Claims.Where(p => p.Type == "UserId").FirstOrDefault()?.Value;
-                }
-                return accountId;
+                // _context ??= StartupState.Instance.Services.GetService<IHttpContextAccessor>();
+                // string accountId = "0";
+                // ClaimsPrincipal user = null;
+                // if (_context != null && _context.HttpContext != null)
+                // {
+                //     user = _context.HttpContext.User;
+                // }
+                // if (user != null && user.Identity != null && user.Identity.IsAuthenticated)
+                // {
+                //     var identity = user.Identity as ClaimsIdentity;
+                //     accountId = identity.Claims.Where(p => p.Type == "UserId").FirstOrDefault()?.Value;
+                // }
+                // return accountId;
+                return "0";
             }
             catch (Exception e)
             {
