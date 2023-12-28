@@ -225,5 +225,26 @@ namespace ERP.AST.Controllers
                 return StatusCode(500, new { Error = e.Message });
             }
         }
+        /// <summary>
+        /// Lấy danh sách quá trình sử dụng
+        /// <para>Created at: 28/12/2023</para>
+        /// <para>Created by: BaoNQ</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet("transfer/{id}")]
+        [ProducesResponseType(typeof(List<AssetUsingHistory>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUsingHistory([FromRoute] int id)
+        {
+            try
+            {
+                return Ok(await _assetModel.GetUsingHistory(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = e.Message });
+            }
+        }
     }
 }
