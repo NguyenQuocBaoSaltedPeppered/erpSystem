@@ -60,7 +60,6 @@ namespace ERP.AST.Enum
         /// <summary>
         /// Tài sản chưa cấp phát
         /// </summary>
-
         public const int ASSET_UNALLOCATED = 3;
         /// <summary>
         /// Tài sản đang sửa, bảo hành
@@ -74,10 +73,6 @@ namespace ERP.AST.Enum
         /// Mất
         /// </summary>
         public const int ASSET_LOST = 6;
-        /// <summary>
-        /// Thanh lý
-        /// </summary>
-        public const int ASSET_LIQUIDATION = 7;
         /// <summary>
         /// Id kho chính của Tài sản
         /// </summary>

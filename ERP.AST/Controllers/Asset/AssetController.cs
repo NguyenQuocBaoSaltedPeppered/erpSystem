@@ -183,5 +183,26 @@ namespace ERP.AST.Controllers
                 return StatusCode(500, new { Error = e.Message });
             }
         }
+        /// <summary>
+        /// Tổng quan giá trị danh sách tài sản
+        /// <para>Created at: 27/09/2023</para>
+        /// <para>Created by: BaoNQ</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet("value-overview")]
+        [ProducesResponseType(typeof(AssetValueOverview), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetValueOverviewAssetData([FromQuery] AssetFilter filter)
+        {
+            try
+            {
+                return Ok(await _assetModel.GetAssetValueOverview(filter));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = e.Message });
+            }
+        }
     }
 }

@@ -39,7 +39,6 @@ namespace ERP.AST.Models.Asset.Schemas
         /// 4: Tài sản đang sửa, bảo hành
         /// 5: Hủy
         /// 6: Mất
-        /// 7: Thanh lý
         /// </summary>
         /// <value></value>
         public int Status { get; set; }
