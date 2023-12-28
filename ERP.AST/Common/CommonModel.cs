@@ -23,25 +23,16 @@ namespace ERP.AST.Common
         }
         public string GetAssetStatusQuery(int StatusQuery)
         {
-            switch(StatusQuery)
+            return StatusQuery switch
             {
-                case AssetConstants.ASSET_ALLOCATED:
-                    return $@" AND ""SYSAST"".""QuantityAllocated"" > 0";
-                case AssetConstants.ASSET_BROKEN:
-                    return $@" AND ""SYSAST"".""QuantityBroken"" > 0";
-                case AssetConstants.ASSET_UNALLOCATED:
-                    return $@" AND ""SYSAST"".""QuantityAllocated"" = 0";
-                case AssetConstants.ASSET_GUARANTEE:
-                    return $@" AND ""SYSAST"".""QuantityGuarantee"" > 0";
-                case AssetConstants.ASSET_CANCEL:
-                    return $@" AND ""SYSAST"".""QuantityCancel"" > 0";
-                case AssetConstants.ASSET_LOST:
-                    return $@" AND ""SYSAST"".""QuantityLost"" > 0";
-                case AssetConstants.ASSET_LIQUIDATION:
-                    return $@" AND ""SYSAST"".""QuantityLiquidation"" > 0";
-                default:
-                    return "";
-            }
+                AssetConstants.ASSET_ALLOCATED => $@" AND ""SYSAST"".""QuantityAllocated"" > 0",
+                AssetConstants.ASSET_BROKEN => $@" AND ""SYSAST"".""QuantityBroken"" > 0",
+                AssetConstants.ASSET_UNALLOCATED => $@" AND ""SYSAST"".""QuantityAllocated"" = 0",
+                AssetConstants.ASSET_GUARANTEE => $@" AND ""SYSAST"".""QuantityGuarantee"" > 0",
+                AssetConstants.ASSET_CANCEL => $@" AND ""SYSAST"".""QuantityCancel"" > 0",
+                AssetConstants.ASSET_LOST => $@" AND ""SYSAST"".""QuantityLost"" > 0",
+                _ => "",
+            };
         }
     }
 }
