@@ -19,5 +19,6 @@ namespace ERP.AST.Models
         Task<ResponseInfo> DeleteAsset(int IdAsset);
         Task<ResponseInfo> UpdateAsset(AssetData assetData);
         Task<AssetValueOverview> GetAssetValueOverview(AssetFilter assetFilter);
+        Task<AssetOverview> GetAssetOverview(AssetFilter assetFilter);
     }
 }
