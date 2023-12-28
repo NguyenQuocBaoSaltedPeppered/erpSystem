@@ -15,6 +15,7 @@ namespace ERP.AST.Models
         Task<ResponseInfo> CreateAssetHandOver(AssetHandOverData assetHandOverData);
         Task<ResponseInfo> UpdateHandOver(int transferId, AssetHandOverData assetHandOverData);
         Task<ListTransferAssetData> GetListAssetHandOverData(FilterTransfer filterTransfer);
+        Task<AssetHandOverDetail> GetAssetHandOverDetail(int id);
 
     }
     public partial class AssetImportAndExportModel : CommonModel, IAssetImportAndExportModel

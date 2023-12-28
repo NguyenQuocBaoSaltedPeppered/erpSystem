@@ -106,8 +106,8 @@ namespace ERP.AST.Controllers
         }
         /// <summary>
         /// Danh sách phiếu bàn giao
-        /// <para>Created at: 02/08/2023</para>
-        /// <para>Created by: PhucVinh</para>
+        /// <para>Created at: 28/12/2023</para>
+        /// <para>Created by: HoangTH</para>
         /// </summary>
         /// <returns>Thông tin</returns>
         /// <response code="404">Không tìm thấy thông tin</response>
@@ -116,6 +116,20 @@ namespace ERP.AST.Controllers
         public async Task<IActionResult> GetListAssetHandOverData([FromQuery] FilterTransfer filter)
         {
             return Ok(await _assetImportAndExportModel.GetListAssetHandOverData(filter));
+        }
+        /// <summary>
+        /// Chi tiết bàn giao
+        /// <para>Created at: 28/12/2023</para>
+        /// <para>Created by: HoangTH</para>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet("hand-over/{id}")]
+        public async Task<IActionResult> GetAssetHandOverDetail([FromRoute] int id)
+        {
+            return Ok(await _assetImportAndExportModel.GetAssetHandOverDetail(id));
         }
     }
 }
