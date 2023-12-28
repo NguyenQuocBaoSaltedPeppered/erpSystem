@@ -367,5 +367,73 @@ namespace ERP.AST.Models
                 throw ;
             }
         }
+        public async Task<List<AssetUsingHistory>> GetUsingHistory(int AssetId)
+        {
+            string method = GetActualAsyncMethodName();
+            DbConnection _connection = _context.GetConnection();
+            try
+            {
+                _logger.LogInformation($"[][{_className}][{method}] Start");
+                List<AssetUsingHistory> returnedList = new();
+                string selectQuery = @"
+                    SELECT ""SYSASTTF"".""Id""
+                        , ""SYSASTTF"".""Code""
+                        , ""SYSASTTF"".""CreatedAt""
+                        , ""SYSASTTF"".""ToUser"" AS ""UserId""
+                        , ""Employees"".""Code"" AS ""UserCode""
+                        , ""Users"".""Name"" AS ""UserName""
+                        , ""SYSBR"".""Name"" AS ""UserBranch""
+                        , ""SYSDPM"".""Name"" AS ""UserDepartment""
+                        , ""SYSASTI"".""Quantity""
+                    FROM ""SYSASTTF""
+                    INNER JOIN ""Users""
+                    ON (
+                        ""SYSASTTF"".""ToUser"" = ""Users"".""Id""
+                        AND ""Users"".""DelFlag"" = FALSE
+                    )
+                    INNER JOIN ""Employees""
+                    ON (
+                        ""Users"".""EmployeeId"" = ""Employees"".""Id""
+                        AND ""Employees"".""DelFlag"" = FALSE
+                    )
+                    INNER JOIN ""SYSASTI""
+                    ON (
+                        ""SYSASTTF"".""AssetImportId"" = ""SYSASTI"".""Id""
+                        AND ""SYSASTI"".""DelFlag"" = FALSE
+                    )
+                    LEFT JOIN ""SYSBR""
+                    ON (
+                        ""SYSASTI"".""BranchId"" = ""SYSBR"".""Id""
+                        AND ""SYSBR"".""DelFlag"" = FALSE
+                    )
+                    INNER JOIN ""SYSDPM""
+                    ON (
+                        ""SYSASTI"".""DepartmentId"" = ""SYSDPM"".""Id""
+                        AND ""SYSDPM"".""DelFlag"" = FALSE
+                    )
+                    INNER JOIN ""SYSASTIDT""
+                    ON (
+                        ""SYSASTI"".""Id"" = ""SYSASTIDT"".""AssetImportId""
+                        AND ""SYSASTIDT"".""DelFlag"" = FALSE
+                    )
+                    WHERE ""SYSASTTF"".""DelFlag"" = FALSE
+                    AND ""SYSASTIDT"".""AssetId"" = @AssetId
+                    ORDER BY ""SYSASTTF"".""Id"" DESC
+                ";
+                var param = new {
+                    AssetId,
+                };
+                _logger.LogInformation($"[][{_className}][{method}] Query start");
+                _logger.LogInformation($"[][{_className}][{method}] {selectQuery}");
+                returnedList = (List<AssetUsingHistory>) await _connection.QueryAsync<AssetUsingHistory>(selectQuery, param);
+                _logger.LogInformation($"[][{_className}][{method}] End");
+                return returnedList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[][{_className}][{method}] Exception: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
