@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ERP.Bases.Models.User.Schemas;
 using Microsoft.EntityFrameworkCore;
-
 namespace ERP.Bases.Models
 {
     public class AuthModel : CommonModel, IAuthModel
@@ -51,5 +50,68 @@ namespace ERP.Bases.Models
                 throw;
             }
         }
+          public  bool AuthRegister(RegisterInfo registerInfo)
+    {
+        try
+        {
+            // Kiểm tra xem mã nhân viên đã tồn tại chưa
+               bool isEmployeeCodeExists = _context.Users.Any(u => u.Employee.Code == registerInfo.EmployeeCode);
+
+            if (isEmployeeCodeExists)
+            {
+                // Mã nhân viên đã tồn tại, không thể đăng ký mới
+                // Bạn có thể xử lý theo nhu cầu cụ thể của bạn
+                return false;
+            }
+            DateTimeOffset currentDateTimeOffset = DateTimeOffset.Now;
+            // Tạo mới thông tin nhân viên
+            var newEmployee = new Databases.Schemas.Employee
+            {
+            Code = registerInfo.EmployeeCode,
+            CreatedAt = currentDateTimeOffset,
+            CreatedBy = 1, 
+            CreatedIp = "::1",
+            UpdatedAt = currentDateTimeOffset,
+            UpdatedBy = 1, 
+            UpdatedIp = "::1",
+            DelFlag = false,
+            BranchId = null, 
+            DepartmentId = null, 
+            PositionId = null, 
+            };
+
+            _context.Employees.Add(newEmployee);
+            _context.SaveChanges();
+            var newUser = new Databases.Schemas.User
+            {
+            Name = registerInfo.EmployeeName,
+            Email = registerInfo.Email,
+            Password = registerInfo.Password,
+            CreatedAt = currentDateTimeOffset,
+            CreatedBy = 1, 
+            CreatedIp = "::1",
+            UpdatedAt = currentDateTimeOffset,
+            UpdatedBy = 1, 
+            UpdatedIp = "::1",
+            DelFlag = false,
+            EmployeeId= newEmployee.Id,
+            };
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+             
+             Exception innerException = ex.InnerException;
+        while (innerException != null)
+        {
+            _logger.LogError($"Inner Exception: {innerException.Message}");
+            innerException = innerException.InnerException;
+        }
+        return false;
+        }
+    }
     }
 }
