@@ -9,5 +9,7 @@ namespace ERP.Bases.Models
     public interface IAuthModel
     {
         Whoami AuthLogin(LoginInfo loginInfo);
+        Whoami AuthRegister(RegisterInfo registerInfo);
+
     }
 }

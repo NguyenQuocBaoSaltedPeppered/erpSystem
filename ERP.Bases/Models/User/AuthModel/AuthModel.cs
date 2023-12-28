@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ERP.Bases.Models.User.Schemas;
 using Microsoft.EntityFrameworkCore;
-
 namespace ERP.Bases.Models
 {
     public class AuthModel : CommonModel, IAuthModel
@@ -51,5 +50,54 @@ namespace ERP.Bases.Models
                 throw;
             }
         }
+          public  Whoami AuthRegister(RegisterInfo registerInfo)
+    {
+        try
+        {
+            // Kiểm tra xem mã nhân viên đã tồn tại chưa
+               bool isEmployeeCodeExists = _context.Users.Any(u => u.Employee.Code == registerInfo.EmployeeCode);
+
+            if (isEmployeeCodeExists)
+            {
+                return null;
+            }
+            var newEmployee = new Databases.Schemas.Employee
+            {
+            Code = registerInfo.EmployeeCode,
+            };
+
+            _context.Employees.Add(newEmployee);
+            _context.SaveChanges();
+            var newUser = new Databases.Schemas.User
+            {
+            Name = registerInfo.EmployeeName,
+            Email = registerInfo.Email,
+            Password = registerInfo.Password,
+            EmployeeId= newEmployee.Id,
+            };
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+            return new Whoami
+            {
+                EmployeeId = newEmployee.Id,
+                EmployeeCode = newEmployee.Code,
+                UserId = newUser.Id,
+                UserName = newUser.Name,
+                Email= newUser.Email,
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+             
+             Exception innerException = ex.InnerException;
+        while (innerException != null)
+        {
+            _logger.LogError($"Inner Exception: {innerException.Message}");
+            innerException = innerException.InnerException;
+        }
+        return null;
+        }
+    }
     }
 }

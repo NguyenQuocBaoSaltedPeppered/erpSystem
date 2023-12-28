@@ -34,5 +34,26 @@ namespace ERP.Bases.Controllers
                 return StatusCode(500, new { Error = ex.Message});
             }
         }
+
+         [HttpPost("register")]
+        public ActionResult<Whoami> AuthRegister([FromBody] RegisterInfo registerInfo)
+        {
+            try
+            {
+
+                Whoami? registeredUser = _authModel.AuthRegister(registerInfo);
+
+                if (registeredUser ==null)
+                {
+                    return BadRequest("Registration failed. Employee Code already exists or other errors occurred.");
+                }
+
+                return Ok(registeredUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = ex.Message });
+            }
+        }
     }
 }
