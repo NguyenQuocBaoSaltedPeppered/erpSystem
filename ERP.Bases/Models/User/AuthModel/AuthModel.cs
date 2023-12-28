@@ -59,19 +59,16 @@ namespace ERP.Bases.Models
 
             if (isEmployeeCodeExists)
             {
-                // Mã nhân viên đã tồn tại, không thể đăng ký mới
-                // Bạn có thể xử lý theo nhu cầu cụ thể của bạn
                 return false;
             }
             DateTimeOffset currentDateTimeOffset = DateTimeOffset.Now;
-            // Tạo mới thông tin nhân viên
             var newEmployee = new Databases.Schemas.Employee
             {
             Code = registerInfo.EmployeeCode,
             CreatedAt = currentDateTimeOffset,
+            UpdatedAt = currentDateTimeOffset,
             CreatedBy = 1, 
             CreatedIp = "::1",
-            UpdatedAt = currentDateTimeOffset,
             UpdatedBy = 1, 
             UpdatedIp = "::1",
             DelFlag = false,
