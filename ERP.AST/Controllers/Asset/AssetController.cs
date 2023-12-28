@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ERP.AST.Models;
 using ERP.AST.Models.Asset.Schemas;
 using System.Net;
+using ERP.Databases;
 
 namespace ERP.AST.Controllers
 {
@@ -127,6 +128,19 @@ namespace ERP.AST.Controllers
             {
                 return StatusCode(500, new { Error = e.Message });
             }
+        }
+        /// <summary>
+        /// Lấy lịch sử tài sản
+        /// <para>Created at: 28/12/2023</para>
+        /// <para>Created by: HoangTH</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpGet("history/{id}")]
+        [ProducesResponseType(typeof(ListAssetHistory), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAssetHistory([FromRoute] int id, [FromQuery] PagingFilter pagingFilter)
+        {
+            return Ok(await _assetModel.GetAssetHistory(id, pagingFilter));
         }
     }
 }
