@@ -142,5 +142,46 @@ namespace ERP.AST.Controllers
         {
             return Ok(await _assetModel.GetAssetHistory(id, pagingFilter));
         }
+        /// Cập nhật tài sản
+        /// <para>Created at: 28/12/2023</para>
+        /// <para>Created by: BaoNQ</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpPut()]
+        [ProducesResponseType(typeof(AssetData), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateAsset([FromForm] AssetData assetData)
+        {
+            try
+            {
+                return Ok(await _assetModel.UpdateAsset(assetData));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = e.Message });
+            }
+        }
+        /// <summary>
+        /// Xóa tài sản
+        /// <para>Created at: 28/12/2023</para>
+        /// <para>Created by: BaoNQ</para>
+        /// </summary>
+        /// <returns>Thông tin</returns>
+        /// <response code="404">Không tìm thấy thông tin</response>
+        /// <response code="500">Lỗi khi có exception</response>
+        [HttpDelete()]
+        [ProducesResponseType(typeof(AssetData), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteAsset([FromQuery] int IdAsset)
+        {
+            try
+            {
+                return Ok(await _assetModel.DeleteAsset(IdAsset));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = e.Message });
+            }
+        }
     }
 }
