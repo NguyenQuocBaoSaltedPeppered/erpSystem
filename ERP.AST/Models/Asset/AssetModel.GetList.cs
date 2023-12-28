@@ -14,10 +14,7 @@ namespace ERP.AST.Models
             try
             {
                 ListAssetData listAssetData = new();
-                if (assetFilter == null)
-                {
-                    assetFilter = new AssetFilter();
-                }
+                assetFilter ??= new AssetFilter();
                     string selectQuery = $@"
                     SELECT * FROM (
                         SELECT *
@@ -185,6 +182,7 @@ namespace ERP.AST.Models
                                         OR LOWER (unaccent (""SYSAST"".""Name"")) LIKE @Keyword
                                         OR LOWER (unaccent (""SYSAST"".""Code"")) LIKE @Keyword
                                     )
+                                    {GetAssetStatusQuery(assetFilter.Status)}
                             ) result
                         ) result_offset
                     ";
