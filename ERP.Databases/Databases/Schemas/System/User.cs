@@ -27,6 +27,16 @@ namespace ERP.Databases.Schemas
         [StringLength(255)]
         public string Password { get; set; } = null!;
         /// <summary>
+        /// Mật khẩu đã mã hoá
+        /// </summary>
+        /// <value></value>
+        public byte[] PasswordHash {get; set;} = null!;
+        /// <summary>
+        /// Salt để mã hoá mật khẩu
+        /// </summary>
+        /// <value></value>
+        public byte[] PasswordSalt {get; set;} = null!;
+        /// <summary>
         /// Id nhân viên
         /// </summary>
         /// <value></value>
