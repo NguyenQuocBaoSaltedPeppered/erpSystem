@@ -212,5 +212,67 @@ namespace ERP.AST.Models
                 throw;
             }
         }
+        public async Task<AssetHandOverDetail> GetAssetHandOverDetail(int id)
+        {
+            string method = GetActualAsyncMethodName();
+            try
+            {   
+                TblAssetTransfer tblAssetTransfer = await _context.AssetTransfers
+                    .Where(x => x.Id == id)
+                    .FirstOrDefaultAsync();
+                TblAssetExportDetail AssetExportDetail = await _context.AssetExportDetails
+                    .Where(x => !x.DelFlag && x.AssetExportId == tblAssetTransfer.AssetExportId)
+                    .FirstOrDefaultAsync();
+                TblAssetStock assetStock = await _context.AssetStocks
+                    .Where(x => !x.DelFlag && x.Id == AssetExportDetail.AssetStockId)
+                    .FirstOrDefaultAsync();
+                AssetHandOverDetail assetHandOverDetail = await _context.AssetTransfers
+                    .Include(x => x.AssetImport)
+                    .Include(x => x.AssetExport)
+                    .Include(x => x.AssetImport.AssetImportDetails)
+                    .Include(x => x.AssetExport.AssetExportDetails)
+                    .Where(x => !x.DelFlag && x.Id == id)
+                    .Select(
+                        x => new AssetHandOverDetail()
+                        {
+                            Id = x.Id,
+                            Code = x.Code,
+                            // AllocationId = x.AssetImportId,
+                            // AllocationCode = x.AssetImport.Code,
+                            HandOverDate = x.AssetImport.ImportDate.ToString(),
+                            IsAllocationToDepartment = x.IsAllocationToDepartment,
+                            ToBranchId = x.AssetImport.BranchId,
+                            CreatedDate = x.AssetImport.CreatedAt,
+                            DepartmentId = x.AssetImport.DepartmentId,
+                            ToUserId = x.AssetImport.UserId,
+                            FromUserId = x.AssetExport.UserId,
+                            Reason = x.Reason,
+                            ToBranchName = _context.Branches.Where(branch => !branch.DelFlag && branch.Id == x.AssetImport.BranchId).Select(branch => branch.Name).FirstOrDefault(),
+                            FromBranchName = _context.Branches.Where(branch =>!branch.DelFlag && branch.Id == x.AssetExport.BranchId).Select(branch => branch.Name).FirstOrDefault(),
+                            DepartmentName = _context.Departments.Where(dpm => !dpm.DelFlag && dpm.Id == x.AssetImport.DepartmentId).Select(dpm => dpm.Name).FirstOrDefault(),
+                            ToUserName = _context.Users.Where(us => !us.DelFlag && us.Id == x.AssetImport.UserId).Select(us => us.Name ).FirstOrDefault(),
+                            FromUserName = _context.Users.Where(us => !us.DelFlag && us.Id == x.AssetExport.UserId).Select(us => us.Name ).FirstOrDefault(),
+                            EmployeeCode = _context.Employees.Include(emp => emp.User).Where(emp => !emp.DelFlag && emp.User.Id == x.AssetImport.UserId).Select(emp => emp.Code).FirstOrDefault(),
+                            ListAssetHandOverDetail = x.AssetImport.AssetImportDetails
+                                .Select(detail => new AssetTransferDataDetail()
+                                {
+                                    AssetCode = detail.Asset.Code,
+                                    AssetId = detail.AssetId,
+                                    AssetName = detail.Asset.Name,
+                                    Quantity = detail.Quantity,
+                                    Note = detail.Note,
+                                    QuantityRemain = assetStock.QuantityRemain
+                                        
+                                }).ToList()
+                        }
+                    ).FirstOrDefaultAsync();
+                return assetHandOverDetail;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[{_className}][{method}] Exception: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

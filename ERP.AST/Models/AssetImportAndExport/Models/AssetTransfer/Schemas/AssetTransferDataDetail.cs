@@ -11,11 +11,6 @@ namespace ERP.AST.Models.AssetImportAndExport.Schemas
         /// <value></value>
         public int? AssetId { get; set; }
         /// <summary>
-        /// Id mã tài sản
-        /// </summary>
-        /// <value></value>
-        public string AssetIDCode { get; set; }
-        /// <summary>
         /// Tên TS
         /// </summary>
         /// <value></value>
@@ -25,11 +20,6 @@ namespace ERP.AST.Models.AssetImportAndExport.Schemas
         /// </summary>
         /// <value></value>
         public string AssetCode { get; set; }
-        /// <summary>
-        /// Tình trạng tài sản
-        /// </summary>
-        /// <value></value>
-        public string StatusQuality { get; set; }
         /// <summary>
         /// Số lượng nhập
         /// </summary>
